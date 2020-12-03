@@ -1,0 +1,30 @@
+
+.testCard {
+    text-align: left;
+    font-size: 1.5rem;
+    /*margin: 1rem;*/
+    padding: 1rem 4rem;
+    background: #f5efef;
+}
+
+.inputField {
+    font-family: "Courier New", 'Arial';
+}
+
+.inputField input {
+    /*background: greenyellow;*/
+    margin: 1rem;
+    padding: 0.2rem;
+    font-size: 1.3rem;
+    width: 50%;
+}
+
+.questionText {
+    text-indent: 2rem;
+    /*padding-bottom: 1rem;*/
+    /*text-justify: inter-character;*/
+    text-align: justify;
+    justify-content: right;
+    
+
+}

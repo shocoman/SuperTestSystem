@@ -1,0 +1,85 @@
+
+
+.App-logo {
+    height: 40vmin;
+    pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .App-logo {
+        animation: App-logo-spin infinite 20s linear;
+    }
+}
+
+.App-header {
+    background-color: #282c34;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: calc(10px + 2vmin);
+    color: white;
+}
+
+.App-link {
+    color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+
+.root {
+    display: flex;
+}
+
+.TestBlock {
+    text-align: center;
+    flex: 2;
+    display: flex;
+}
+
+
+.chooseTestType {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    margin-left: 1rem;
+}
+.chooseTestType button {
+    font-size: 2rem;
+    margin: 0rem;
+    padding: 1.2rem;
+    border-radius: 0px;
+    border: 0.1rem solid darkgray;
+    box-shadow: 5px 5px 3px lightgray;
+}
+
+.chooseTestType button:nth-child(2) {
+    font-size: 2rem;
+    margin: 0rem;
+    padding: 0.5rem;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.chooseTestType button:last-child {
+    font-size: 2rem;
+    margin: 0rem;
+    padding: 0.5rem;
+    border-radius: 0px 0px 10px 10px;
+}
+
+
+.chooseTestType label {
+    font-size: 2rem;
+    font-style: italic;
+}
