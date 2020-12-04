@@ -1,6 +1,6 @@
 
 .checkResults {
-    padding: 1rem;
+    /*padding: 1rem;*/
     font-size: 2rem;
     border-radius: 10px;
 
@@ -16,7 +16,7 @@ ul {
     /*list-style: none;*/
     list-style-type: none;
     padding: 0;
-    margin: 1rem;
+    margin: .5rem;
 
     box-shadow: 5px 5px 5px lightgray;
 }

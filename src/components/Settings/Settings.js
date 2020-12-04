@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
 
+import allTasks from '../../Tasks/allTasks';
+
+let initialTasks = [...allTasks];
+
 function ThemeChooser({ name, id, setChecked }) {
     let [numberEnabled, setNumberEnabled] = useState(false);
     let [text, setText] = useState('0');
@@ -28,47 +32,58 @@ function ThemeChooser({ name, id, setChecked }) {
 
     return (
         <div style={{ padding: '5px' }}>
-            <input id={'check' + id} type='checkbox' onChange={onChange} />
-            <input
-                size={5}
-                type='number'
-                value={text}
-                disabled={!numberEnabled}
-                min={0}
-                pattern={/[\d]*/}
-                onChange={onTextEnter}
-            />
-            <label style={{ padding: '5px' }} htmlFor={'check' + id}>
-                {name}
+            <label>
+                <input
+                    size={3}
+                    type='number'
+                    value={text}
+                    disabled={!numberEnabled}
+                    min={0}
+                    pattern={/[\d]*/}
+                    onChange={onTextEnter}
+                    className={'nes-input'}
+                />
+            </label>
+            <label>
+                <input
+                    id={'check' + id}
+                    type='checkbox'
+                    onChange={onChange}
+                    className={'nes-checkbox'}
+                />
+                <span style={{ padding: '5px' }}>{name}</span>
             </label>
         </div>
     );
 }
 
 function formatLink(pairs) {
-    return (
-        'http://localhost:3000/test?' +
-        pairs
-            .filter((check) => check.number > 0)
-            .map((check) => `${check.name.replaceAll(' ', '_')}=${check.number}`)
-            .join('&')
-    );
+    let mainLink = `${window.location.origin}/test`;
+
+    let params = pairs
+        .filter((check) => check.number > 0)
+        .map((check) => `${check.name.replaceAll(' ', '_')}=${check.number}`)
+        .join('&');
+    if (params.length > 0) {
+        mainLink += '?' + params;
+    }
+    return mainLink;
 }
 
 export default function Settings() {
-    const задачи = [
-        'Измерение информации',
-        'Основы кодирования',
-        'Системы счисления',
-        'Основы машинной арифметики',
-    ];
+    // const задачи = [
+    //     'Измерение информации',
+    //     'Основы кодирования',
+    //     'Системы счисления',
+    //     'Основы машинной арифметики',
+    // ];
+
+    const задачи = initialTasks.map((a) => a.taskName ?? a.name);
     let checkedInit = задачи.map((name) => ({
         name,
         number: 0,
     }));
     const [checked, setChecked] = useState(checkedInit);
-
-    const [link, setLink] = useState('');
 
     return (
         <div>
@@ -82,10 +97,10 @@ export default function Settings() {
                     setChecked={setChecked}
                 />
             ))}
-            <button>Create link</button>
             {checked.length !== 0 && (
                 <div>
-                    Link: <a href={formatLink(checked)}>{formatLink(checked)}</a>
+                    Link:{' '}
+                    <a href={formatLink(checked)}>{formatLink(checked)}</a>
                 </div>
             )}
         </div>

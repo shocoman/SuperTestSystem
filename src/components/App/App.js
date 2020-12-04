@@ -1,55 +1,44 @@
-import React, { useState } from "react";
-import TestAddition from "../TestAddition/TestBlock";
-import "./App.css";
+import React, { useState } from 'react';
+import TestBlock from '../TestBlock/TestBlock';
+import './App.css';
+
+import allTasks from "../../Tasks/allTasks";
+import {ConvertDecimalToN} from "../../Tasks/positional_radix";
+
+let initialTasks = [...allTasks];
+initialTasks = [ConvertDecimalToN]
+
+const createInitialTasks = (setTaskAnswers) => initialTasks.map((task, index) => {
+    let taskDescription = task.generate_task();
+
+    return {
+        taskClass: task,
+        taskDescription,
+        taskUpdateAnswer: (userAnswer) => {
+            setTaskAnswers((prevTaskAnswers) => {
+                let newTaskAnswers = prevTaskAnswers.map((p) => [...p]);
+                let correctAnswer = task.solve(taskDescription.params);
+                if (Array.isArray(correctAnswer))
+                    correctAnswer = correctAnswer[0];
+                let isCorrect = correctAnswer.toString() === userAnswer.toString();
+                newTaskAnswers[index] = [userAnswer, isCorrect];
+                return newTaskAnswers;
+            });
+        },
+    };
+});
 
 function App() {
-  const opTypes = [
-    ["+", (a, b) => a + b],
-    ["-", (a, b) => a - b],
-    ["*", (a, b) => a * b],
-    ["/", (a, b) => a / b],
-  ];
+    const [taskAnswers, setTaskAnswers] = useState(new Array(initialTasks.length).fill(0).fill([0, false]));
+    const [tasks, setTasks] = useState(_ => createInitialTasks(setTaskAnswers));
 
-  const [opType, setOpType] = useState(0);
-
-  const setOpNum = (i) => {
-    if (opType !== i) {
-      setOpType(i);
-    }
-  };
-
-  let buttons = [
-    "Измерение информации",
-    "Основы кодирования",
-    "Позиционные системы счисления",
-    "Основы машинной арифметики",
-  ].map((name, i) => {
-    let style = { backgroundColor: i === opType ? "#cab6b6" : "" };
     return (
-      <button
-        style={style}
-        key={i}
-        onClick={() => {
-          setOpNum(i);
-        }}
-      >
-        {name}
-      </button>
+        <div className={'root'}>
+            <div className='TestBlock'>
+                <TestBlock tasks={tasks} answers={taskAnswers} />
+            </div>
+        </div>
     );
-  });
-
-  return (
-    <div className={"root"}>
-      <div className={"chooseTestType"}>
-        <label>Выбери тему:</label>
-        {buttons}
-      </div>
-
-      <div className="TestBlock">
-        <TestAddition key={opTypes[opType]} opType={opType} num={3} />
-      </div>
-    </div>
-  );
 }
 
 export default App;

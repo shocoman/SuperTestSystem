@@ -1,5 +1,4 @@
 
-
 .App-logo {
     height: 40vmin;
     pointer-events: none;
@@ -35,8 +34,6 @@
     }
 }
 
-
-
 .root {
     display: flex;
 }
@@ -47,7 +44,6 @@
     display: flex;
 }
 
-
 .chooseTestType {
     flex: 1;
     text-align: center;
@@ -55,26 +51,19 @@
     flex-direction: column;
     margin-left: 1rem;
 }
+
 .chooseTestType button {
-    font-size: 2rem;
-    margin: 0rem;
+    font-size: 1.2rem;
     padding: 1.2rem;
-    border-radius: 0px;
     border: 0.1rem solid darkgray;
     box-shadow: 5px 5px 3px lightgray;
 }
 
 .chooseTestType button:nth-child(2) {
-    font-size: 2rem;
-    margin: 0rem;
-    padding: 0.5rem;
     border-radius: 10px 10px 0px 0px;
 }
 
 .chooseTestType button:last-child {
-    font-size: 2rem;
-    margin: 0rem;
-    padding: 0.5rem;
     border-radius: 0px 0px 10px 10px;
 }
 
