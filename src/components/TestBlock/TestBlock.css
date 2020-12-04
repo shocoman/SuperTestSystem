@@ -16,7 +16,7 @@ ul {
     /*list-style: none;*/
     list-style-type: none;
     padding: 0;
-    margin: .5rem;
+    /*margin: .5rem;*/
 
     box-shadow: 5px 5px 5px lightgray;
 }

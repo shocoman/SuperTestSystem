@@ -5,8 +5,31 @@ import './App.css';
 import allTasks from "../../Tasks/allTasks";
 import {ConvertDecimalToN} from "../../Tasks/positional_radix";
 
-let initialTasks = [...allTasks];
-initialTasks = [ConvertDecimalToN]
+let initialTasks = [];
+initInitialTasks(initialTasks)
+
+function initInitialTasks(initialTasks) {
+    let url = new URL(window.location.href);
+    let themes = {};
+    for (let [k, v] of url.searchParams) {
+        if (v === '') continue;
+        let name = k.replaceAll('_', ' ');
+        let num = parseInt(v);
+        themes[name] = num;
+    }
+    for (let t of allTasks) {
+        if (t.taskName in themes) {
+            for (let i = 0; i < themes[t.taskName]; ++i) {
+                initialTasks.push(t);
+            }
+        }
+    }
+
+    if (initialTasks.length === 0) {
+        // initialTasks.push(...allTasks);
+        initialTasks.push(ConvertDecimalToN);
+    }
+}
 
 const createInitialTasks = (setTaskAnswers) => initialTasks.map((task, index) => {
     let taskDescription = task.generate_task();
