@@ -82,8 +82,10 @@ export class Table {
 export function digitToChar(digit) {
     if (digit < 10) {
         return String.fromCharCode( '0'.charCodeAt(0) + digit );
-    } else {
+    } else if (digit < 36) {
         return String.fromCharCode( 'A'.charCodeAt(0) + digit - 10 );
+    } else {
+        return '?';
     }
 }
 
