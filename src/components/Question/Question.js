@@ -2,7 +2,7 @@ import React from 'react';
 import './Question.css';
 import ConvertDecimalTable from './ConvertDecimalTable';
 import { formatTable } from './EncodingTable';
-import { LogarithmCalculator } from './LogarithmCalculator';
+import { ExpressionEvaluator } from './ExpressionEvaluator';
 import HuffmanTree from "./HuffmanTree";
 
 export const AnswerStatus = Object.freeze({
@@ -25,8 +25,9 @@ export default function Question({ onchange, value, keyId, status, answer, task 
             </div>
 
             {task.taskClass.uses_table && formatTable(task.taskDescription.params)}
-            {task.taskClass.uses_logarithm_calculator && LogarithmCalculator()}
-            {task.taskClass.uses_convert_table && ConvertDecimalTable(task.taskDescription.params)}
+            {task.taskClass.uses_calculator && ExpressionEvaluator()}
+            {task.taskClass.uses_convert_table && ConvertDecimalTable(false, task.taskDescription.params)}
+            {task.taskClass.uses_float_convert_table && ConvertDecimalTable(true, task.taskDescription.params)}
             {task.taskClass.uses_huffman_tree && HuffmanTree(task.taskDescription.params)}
 
             <div className='inputField'>
@@ -38,6 +39,7 @@ export default function Question({ onchange, value, keyId, status, answer, task 
                     onChange={onchange}
                     className={className}
                 />
+                <i className="my-nes-kirby nes-kirby "/>
             </div>
         </div>
     );

@@ -1,37 +1,24 @@
-
 .checkResults {
-    /*padding: 1rem;*/
-    font-size: 2rem;
-    border-radius: 10px;
-
-    box-shadow: 5px 5px 5px lightgray;
-    width: 95%;
+  /*padding: 1rem;*/
+  font-size: 2rem;
+  border-radius: 10px;
+  box-shadow: 5px 5px 5px lightgray;
+  width: 95%;
 }
-
 button:hover {
-    background: lightgray;
+  background: lightgray;
 }
-
 ul {
-    /*list-style: none;*/
-    list-style-type: none;
-    padding: 0;
-    /*margin: .5rem;*/
-
-    box-shadow: 5px 5px 5px lightgray;
+  /*list-style: none;*/
+  list-style-type: none;
+  padding: 0;
+  /*margin: .5rem;*/
+  box-shadow: 5px 5px 5px lightgray;
 }
-
-li {
-    border: 0.2rem solid #cfcbcb;
-    border-bottom-width: 0px;
-    overflow: hidden;
+ul .nes-kirby {
+  display: none;
 }
-
-li:last-child {
-    border-radius: 0px 0px 15px 15px;
-    border-bottom-width: 5px;
+ul li:last-child .nes-kirby {
+  display: initial !important;
 }
-
-li:first-child {
-    border-radius: 15px 15px 0px 0px;
-}
+/*# sourceMappingURL=TestBlock.css.map */

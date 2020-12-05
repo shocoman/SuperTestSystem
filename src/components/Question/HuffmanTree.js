@@ -28,7 +28,9 @@ export default function HuffmanTree([msg]) {
             freq[ch] = freq[ch] ? freq[ch] + 1 : 1;
         }
 
-        return Object.entries(freq).map(([char, frequency]) => makeNode(char, frequency / msg.length));
+        return Object.entries(freq).map(([char, frequency]) =>
+            makeNode(char, frequency / msg.length)
+        );
         // return [ makeNode('A', 0.3),  makeNode('B', 0.3),  makeNode('C', 0.1),  makeNode('D', 0.2),  makeNode('E', 0.1), ]
     });
 
@@ -61,10 +63,10 @@ export default function HuffmanTree([msg]) {
 
         if (!nextParentNode || !nextParentNode.temporary) return;
         nextParentNode.prob = nextParentNode.children.reduce((acc, curr) => acc + curr.prob, 0);
-        nextParentNode.title =
-            '{ ' +
-            nextParentNode.children.reduce((acc, curr) => acc + curr.title + ' ', ' ') +
-            ' }';
+        nextParentNode.title = `{${nextParentNode.children.reduce(
+            (acc, curr) => acc + curr.title + '',
+            ''
+        )}}`;
 
         const mywalk = (node, code) => {
             node.code = code;
@@ -77,8 +79,6 @@ export default function HuffmanTree([msg]) {
         };
 
         for (let i = 0; i < treeData.length; ++i) mywalk(treeData[i], '');
-
-        console.log(treeData);
     };
 
     const onClick = (e) => {

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './Settings.css'
 
 import allTasks from '../../Tasks/allTasks';
 
@@ -9,12 +10,12 @@ function ThemeChooser({ name, id, setChecked }) {
     let [text, setText] = useState('0');
 
     const onChange = (e) => {
-        setText('0');
+        setText(numberEnabled ? '0' : '1');
         setNumberEnabled(!numberEnabled);
 
         setChecked((prevState) => {
             let newState = prevState.map((a) => ({ ...a }));
-            newState[id].number = '0';
+            newState[id].number = numberEnabled ? '0' : '1';
             return newState;
         });
     };
@@ -31,7 +32,7 @@ function ThemeChooser({ name, id, setChecked }) {
     };
 
     return (
-        <div style={{ padding: '5px' }}>
+        <div>
             <label>
                 <input
                     size={3}
@@ -42,6 +43,7 @@ function ThemeChooser({ name, id, setChecked }) {
                     pattern={/[\d]*/}
                     onChange={onTextEnter}
                     className={'nes-input'}
+                    style={{ borderImageOutset: 0, margin: 1 }}
                 />
             </label>
             <label>
@@ -51,7 +53,7 @@ function ThemeChooser({ name, id, setChecked }) {
                     onChange={onChange}
                     className={'nes-checkbox'}
                 />
-                <span style={{ padding: '5px' }}>{name}</span>
+                <span>{name}</span>
             </label>
         </div>
     );
@@ -86,20 +88,15 @@ export default function Settings() {
     const [checked, setChecked] = useState(checkedInit);
 
     return (
-        <div>
-            <div>Выбери тему и кол-во заданий</div>
+        <div style={{marginTop: 10}} className={'nes-container is-rounded with-title task-list'}>
+            <div className={'title'}>Выбери тему и кол-во заданий</div>
 
             {задачи.map((name, index) => (
-                <ThemeChooser
-                    name={name}
-                    id={index}
-                    key={index}
-                    setChecked={setChecked}
-                />
+                <ThemeChooser name={name} id={index} key={index} setChecked={setChecked} />
             ))}
             {checked.length !== 0 && (
-                <div>
-                    Link:{' '}
+                <div className={'nes-text is-error'}>
+                    Ссылка:
                     <a href={formatLink(checked)}>{formatLink(checked)}</a>
                 </div>
             )}

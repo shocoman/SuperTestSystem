@@ -26,10 +26,10 @@ function initInitialTasks(initialTasks) {
     }
 
     if (initialTasks.length === 0) {
-        // initialTasks.push(...allTasks);
+        initialTasks.push(...allTasks);
         // initialTasks.push(ConvertDecimalToN);
         // initialTasks.push(HuffmanEncoding);
-        initialTasks.push(ConvertDecimalFloatToN);
+        // initialTasks.push(ConvertDecimalFloatToN);
     }
 }
 

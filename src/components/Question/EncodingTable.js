@@ -4,7 +4,7 @@ export function formatTable([_, table]) {
     return (
         <div style={{ margin: '10px' }}>
             <table
-                className='nes-table is-bordered is-centered'
+                className='nes-table is-bordered is-centered with-title'
                 style={{ margin: 'auto' }}
             >
                 <thead>

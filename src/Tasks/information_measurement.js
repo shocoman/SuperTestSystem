@@ -4,7 +4,7 @@ import { powerOfTwo, randDouble, randInt } from './utilities';
 export class SizeOfAlphabet {
     static taskName = "Размер алфавита"
     static paramsLength = 1;
-    static uses_logarithm_calculator = true;
+    static uses_calculator = true;
 
     static solve([bitsInOneLetter]) {
         return Math.pow(2, bitsInOneLetter);
@@ -26,7 +26,7 @@ export class SizeOfAlphabet {
 export class LengthOfMSG {
     static taskName = "Длина сообщения"
     static paramsLength = 2;
-    static uses_logarithm_calculator = true;
+    static uses_calculator = true;
 
     static solve([a, b]) {
         return b / Math.log2(a | 0);
@@ -49,7 +49,7 @@ export class LengthOfMSG {
 export class Task3 {
     static taskName = "Кол-во информации на экране"
     static paramsLength = 3;
-    static uses_logarithm_calculator = true;
+    static uses_calculator = true;
 
     static solve([a, b, c]) {
         return a * b * Math.log2(c);
@@ -74,7 +74,7 @@ export class Task3 {
 export class Task4 {
     static taskName = "Максимальная энтропия системы"
     static paramsLength = 2;
-    static uses_logarithm_calculator = true;
+    static uses_calculator = true;
 
     static solve([a, b]) {
         return a * Math.log2(b);
@@ -97,7 +97,7 @@ export class Task4 {
 export class Task5 {
     static taskName = "Энтропия алфавита"
     static paramsLength = 2;
-    static uses_logarithm_calculator = true;
+    static uses_calculator = true;
 
     static solve([msg]) {
         let letters = {};

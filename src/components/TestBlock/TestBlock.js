@@ -291,7 +291,10 @@ export default function TestBlock({ tasks, answers }) {
 
     let tests = tasks.map((task, i) => (
         <li className={'nes-container is-rounded'} key={i}>
-
+            <div style={{ display: "inherit", width: "inherit", top: -15 }} className="nes-badge is-splited">
+                <span style={{width: "10%"}} className="is-success">{i+1}</span>
+                <span style={{width: "90%"}} className="is-dark">{tasks[i].taskClass.taskName}</span>
+            </div>
             <Question
                 value={task.userAnswer}
                 keyId={i}

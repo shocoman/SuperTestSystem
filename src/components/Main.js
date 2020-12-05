@@ -25,7 +25,7 @@ export default function Main() {
                         className='nes-badge'
                         style={{ marginLeft: '100px', width: '400px' }}
                     >
-                        <span className='is-success'>Тесты тесты тесты!</span>
+                        <span className='is-success'>Тесты-тесты-тесты!</span>
                         <i className='nes-icon is-large star'></i>
                     </div>
                 </div>

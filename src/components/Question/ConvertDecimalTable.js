@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import { digitToChar } from '../../Tasks/utilities';
 
-export default function ConvertDecimalTable([convertible, radix]) {
+export default function ConvertDecimalTable(floatConvert, [convertible, radix]) {
     let initTable = [['', '']];
     const [rows, setRows] = useState(initTable);
     let decodedNumber = '';
     if (rows[0][1] !== '') {
-        decodedNumber = rows
-            .filter(([_, v]) => v !== '')
-            .map(([_, v]) => digitToChar(parseInt(v)))
-            .reverse()
-            .join('');
+        if (floatConvert)
+            decodedNumber =
+                '0.' +
+                rows
+                    .filter(([k, _]) => k !== '')
+                    .map(([k, _]) => digitToChar(parseInt(k)))
+                    .join('');
+        else
+            decodedNumber = rows
+                .filter(([_, v]) => v !== '')
+                .map(([_, v]) => digitToChar(parseInt(v)))
+                .reverse()
+                .join('');
     }
 
     const onRowChange = (colNum, rowNum, e) => {
@@ -38,11 +46,21 @@ export default function ConvertDecimalTable([convertible, radix]) {
 
     const convertTable = (
         <table className='nes-table is-bordered is-centered'>
+            <caption style={{ captionSide: 'top' }}>Таблица перевода</caption>
             <thead>
-                <tr>
-                    <td>Делимое</td>
-                    <td>Остаток</td>
-                </tr>
+                {floatConvert ? (
+                    <tr>
+                        <td>Целая часть</td>
+                        <td>
+                            Дробная часть ({convertible} * {radix})
+                        </td>
+                    </tr>
+                ) : (
+                    <tr>
+                        <td>Делимое</td>
+                        <td>Остаток</td>
+                    </tr>
+                )}
             </thead>
             <tbody>
                 {rows.map(([a, b], i) => (
@@ -71,11 +89,7 @@ export default function ConvertDecimalTable([convertible, radix]) {
     );
 
     return (
-        <div
-            style={{ marginTop: '30px' }}
-            className={'convertTable nes-container with-title is-centered is-rounded'}
-        >
-            <p className='title'>Таблица перевода</p>
+        <div className={'convertTable '}>
             {convertTable}
             {decodedNumber !== '' && <div>Возможный ответ: {decodedNumber}</div>}
         </div>

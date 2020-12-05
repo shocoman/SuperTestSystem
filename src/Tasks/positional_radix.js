@@ -3,6 +3,7 @@ import { convertRadix, digitToChar, randBool, randInt, Table } from './utilities
 export class ConvertDecimalToN {
     static taskName = 'Конвертация из десятичной СС';
     static paramsLength = 2;
+    static uses_calculator = true;
     static uses_convert_table = true;
 
     static solve([number, base]) {
@@ -41,6 +42,7 @@ export class ConvertDecimalToN {
 export class ConvertNtoDecimal {
     static taskName = 'Конвертация в десятичную СС';
     static paramsLength = 2;
+    static uses_calculator = true;
 
     static solve([number, base]) {
         return convertRadix(number, base, 10);
@@ -62,15 +64,24 @@ export class ConvertNtoDecimal {
 
 export class ConvertDecimalFloatToN {
     static taskName = 'Конвертация дроби из десятичной СС в двоичную';
-    static paramsLength = 1;
-    static uses_convert_table = true;
+    static paramsLength = 2;
+    static uses_float_convert_table = true;
+    static uses_calculator = true;
 
-    static solve([number]) {
-        let digitArray = Array.from(number.replace('0.')).map((ch) => parseInt(ch, 10));
-
-        let ans = digitArray.reduce((acc, d, i) => (d === 1 ? acc + Math.pow(2, -i - 1) : acc), 0);
-        console.log(ans);
-        return ans;
+    static solve([number, base]) {
+        let answer = '';
+        let num = number;
+        while (num !== 0) {
+            num *= base;
+            if (num < 1) {
+                answer += '0'
+            } else {
+                num -= (num|0);
+                answer += 1;
+            }
+        }
+        // console.log(answer);
+        return answer;
     }
 
     static check_solution(params, userAnswer) {
@@ -78,18 +89,22 @@ export class ConvertDecimalFloatToN {
     }
 
     static generate_task() {
-        let length = randInt(2, 4);
+        let length = randInt(1, 5);
+        let base = 2; //randInt(2, 16, (a) => (a === 10 ? 16 : a));
+
         let ans = 0;
-        for (let i = 0; i < length; i++) {
-            ans += randBool() ? Math.pow(2, -i - 1) : 0;
+        while (ans === 0) {
+            for (let i = 0; i < length; i++) {
+                ans += randBool() ? Math.pow(base, -i - 1) : 0;
+            }
         }
-        let params = [ans];
+        let params = [ans, base];
         return { params, text: this.getText(params) };
     }
 
     static getText(params) {
         for (let i = 0; i < this.paramsLength; ++i)
             params[i] = params[i] ?? String.fromCharCode('A'.charCodeAt(0) + i);
-        return `Перевести число с плавающей запятой ${params[0]} из десятичной системы в СС с основанием 2.`;
+        return `Перевести число с плавающей запятой ${params[0]} из десятичной системы в СС с основанием ${params[1]}.`;
     }
 }
