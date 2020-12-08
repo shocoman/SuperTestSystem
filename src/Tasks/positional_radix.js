@@ -1,5 +1,6 @@
-import { convertRadix, digitToChar, randBool, randInt, Table } from './utilities';
+import { convertRadix, digitToChar, randBool, randInt } from './utilities';
 import { Task } from './task';
+import _ from 'lodash';
 
 export class ConvertDecimalToN extends Task {
     static taskName = 'Конвертация из десятичной СС';
@@ -21,9 +22,25 @@ export class ConvertDecimalToN extends Task {
                 .map((a) => digitToChar(a))
                 .reverse()
                 .join(''),
-            intParts,
-            remainderParts,
+            table: intParts.map((a, i) => [a, remainderParts[i]]),
         };
+    }
+
+    static reduce(taskDescription, userAnswer) {
+        let answer = _.cloneDeep(userAnswer);
+        let { mainAnswer, table } = this.solve(taskDescription.params);
+        answer.mainAnswer.correct =
+            mainAnswer.toString() === userAnswer.mainAnswer.value.toString();
+
+        // compare table
+        answer.additionalProperties.table = userAnswer.additionalProperties.table.map(
+            ([fst_col, snd_col], i) => [
+                { ...fst_col, correct: table[i] && fst_col.value === table[i][0].toString() },
+                { ...snd_col, correct: table[i] && snd_col.value === table[i][1].toString() },
+            ]
+        );
+
+        return answer;
     }
 
     static check_solution(params, userAnswer) {

@@ -47,7 +47,7 @@ const createInitialTasks = (setTaskAnswers) =>
             taskUpdateAnswer: (userAnswer) => {
                 setTaskAnswers((prevTaskAnswers) => {
                     let newTaskAnswers = prevTaskAnswers.map((answer) => _.cloneDeep(answer));
-                    newTaskAnswers[index] = task.reduce(taskDescription, userAnswer);;
+                    newTaskAnswers[index] = task.reduce(taskDescription, userAnswer);
                     return newTaskAnswers;
                 });
             },

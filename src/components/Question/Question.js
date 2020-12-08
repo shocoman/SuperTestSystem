@@ -14,10 +14,14 @@ export const AnswerStatus = Object.freeze({
 });
 
 export default function Question({ onInputChange, keyId, userAnswer, task }) {
-    const onChange = (e) => {
+    const onMainInputChange = (e) => {
         let u = _.cloneDeep(userAnswer);
         u.mainAnswer.value = e.target.value;
         onInputChange(u);
+    };
+
+    const onAdditionalComponentChange = (answer) => {
+        onInputChange(answer);
     };
 
     const className = 'nes-input ' + (userAnswer.mainAnswer.correct ? 'is-success' : '');
@@ -27,8 +31,22 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
 
             {task.taskClass.uses_table && formatTable(task.taskDescription.params)}
             {task.taskClass.uses_calculator && ExpressionEvaluator()}
-            {task.taskClass.uses_convert_table && ConvertDecimalTable(false, task.taskDescription.params)}
-            {task.taskClass.uses_float_convert_table && ConvertDecimalTable(true, task.taskDescription.params)}
+            {task.taskClass.uses_convert_table && (
+                <ConvertDecimalTable
+                    floatConvert={false}
+                    params={task.taskDescription.params}
+                    userAnswer={userAnswer}
+                    onChange={onAdditionalComponentChange}
+                />
+            )}
+            {task.taskClass.uses_float_convert_table && (
+                <ConvertDecimalTable
+                    floatConvert={true}
+                    params={task.taskDescription.params}
+                    userAnswer={userAnswer}
+                    onChange={onAdditionalComponentChange}
+                />
+            )}
             {task.taskClass.uses_huffman_tree && HuffmanTree(task.taskDescription.params)}
 
             <div className='inputField'>
@@ -37,10 +55,10 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
                     name={'answerField'}
                     id={keyId}
                     value={task.userAnswer}
-                    onChange={onChange}
+                    onChange={onMainInputChange}
                     className={className}
                 />
-                <i className='my-nes-kirby nes-kirby ' />
+                <i className='nes-kirby' />
             </div>
         </div>
     );
