@@ -3,7 +3,9 @@ import './Question.css';
 import ConvertDecimalTable from './ConvertDecimalTable';
 import { formatTable } from './EncodingTable';
 import { ExpressionEvaluator } from './ExpressionEvaluator';
-import HuffmanTree from "./HuffmanTree";
+import HuffmanTree from './HuffmanTree';
+import _ from 'lodash';
+import { UserAnswer } from '../../Tasks/utilities';
 
 export const AnswerStatus = Object.freeze({
     WRONG: 1,
@@ -11,18 +13,17 @@ export const AnswerStatus = Object.freeze({
     RIGHT: 3,
 });
 
-export default function Question({ onchange, value, keyId, status, answer, task }) {
-    const className = 'nes-input ' + (status === AnswerStatus.RIGHT ? 'is-success' : '');
+export default function Question({ onInputChange, keyId, userAnswer, task }) {
+    const onChange = (e) => {
+        let u = _.cloneDeep(userAnswer);
+        u.mainAnswer.value = e.target.value;
+        onInputChange(u);
+    };
 
-    const questionText = task.taskDescription.text;
+    const className = 'nes-input ' + (userAnswer.mainAnswer.correct ? 'is-success' : '');
     return (
         <div className='testCard'>
-            <div className='questionText'>
-                {questionText.split('\n').map((q, i) => (
-                    <div key={i}> {q} </div>
-                ))}
-                {answer && <div>- Правильный ответ: {answer}</div>}
-            </div>
+            <div className='questionText'>{task.taskDescription.text}</div>
 
             {task.taskClass.uses_table && formatTable(task.taskDescription.params)}
             {task.taskClass.uses_calculator && ExpressionEvaluator()}
@@ -35,11 +36,11 @@ export default function Question({ onchange, value, keyId, status, answer, task 
                 <input
                     name={'answerField'}
                     id={keyId}
-                    value={value}
-                    onChange={onchange}
+                    value={task.userAnswer}
+                    onChange={onChange}
                     className={className}
                 />
-                <i className="my-nes-kirby nes-kirby "/>
+                <i className='my-nes-kirby nes-kirby ' />
             </div>
         </div>
     );

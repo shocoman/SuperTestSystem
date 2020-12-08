@@ -1,6 +1,7 @@
 import { convertRadix, digitToChar, randBool, randInt, Table } from './utilities';
+import { Task } from './task';
 
-export class ConvertDecimalToN {
+export class ConvertDecimalToN extends Task {
     static taskName = 'Конвертация из десятичной СС';
     static paramsLength = 2;
     static uses_calculator = true;
@@ -15,17 +16,21 @@ export class ConvertDecimalToN {
             intParts.push(n);
             n = (n / base) | 0;
         }
-        return [
-            remainderParts
+        return {
+            mainAnswer: remainderParts
                 .map((a) => digitToChar(a))
                 .reverse()
                 .join(''),
             intParts,
             remainderParts,
-        ];
+        };
     }
 
-    static generate_task() {
+    static check_solution(params, userAnswer) {
+        return this.solve(params).mainAnswer === userAnswer;
+    }
+
+    static generateTask() {
         let number = randInt(1, 1024);
         let base = randInt(2, 17, (a) => (a === 10 ? 11 : a));
         let params = [number, base];
@@ -39,7 +44,7 @@ export class ConvertDecimalToN {
     }
 }
 
-export class ConvertNtoDecimal {
+export class ConvertNtoDecimal extends Task {
     static taskName = 'Конвертация в десятичную СС';
     static paramsLength = 2;
     static uses_calculator = true;
@@ -48,7 +53,7 @@ export class ConvertNtoDecimal {
         return convertRadix(number, base, 10);
     }
 
-    static generate_task() {
+    static generateTask() {
         let base = randInt(2, 17, (a) => (a === 10 ? 11 : a));
         let number = convertRadix(randInt(1, 1024), 10, base);
         let params = [number, base];
@@ -62,7 +67,7 @@ export class ConvertNtoDecimal {
     }
 }
 
-export class ConvertDecimalFloatToN {
+export class ConvertDecimalFloatToN extends Task {
     static taskName = 'Конвертация дроби из десятичной СС в двоичную';
     static paramsLength = 2;
     static uses_float_convert_table = true;
@@ -74,9 +79,9 @@ export class ConvertDecimalFloatToN {
         while (num !== 0) {
             num *= base;
             if (num < 1) {
-                answer += '0'
+                answer += '0';
             } else {
-                num -= (num|0);
+                num -= num | 0;
                 answer += 1;
             }
         }
@@ -88,7 +93,7 @@ export class ConvertDecimalFloatToN {
         return this.solve(params).toString() === userAnswer.toString().replace('0.', '');
     }
 
-    static generate_task() {
+    static generateTask() {
         let length = randInt(1, 5);
         let base = 2; //randInt(2, 16, (a) => (a === 10 ? 16 : a));
 

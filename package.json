@@ -15,7 +15,9 @@
     "nes.css": "^2.3.0",
     "less": "^3.12.2",
     "react-sortable-tree": "^2.8.0",
-    "react-sortable-tree-theme-full-node-drag": "^1.1.0"
+    "react-sortable-tree-theme-full-node-drag": "^1.1.0",
+    "query-string": "^6.13.7",
+    "lodash": "^4.17.20"
   },
   "scripts": {
     "start": "react-scripts start",

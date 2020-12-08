@@ -1,7 +1,8 @@
 import { powerOfTwo, randDouble, randInt } from './utilities';
+import {Task} from "./task";
 
 
-export class SizeOfAlphabet {
+export class SizeOfAlphabet extends Task {
     static taskName = "Размер алфавита"
     static paramsLength = 1;
     static uses_calculator = true;
@@ -10,7 +11,7 @@ export class SizeOfAlphabet {
         return Math.pow(2, bitsInOneLetter);
     }
 
-    static generate_task() {
+    static generateTask() {
         let bitsInOneLetter = randInt(1, 11);
         let params = [bitsInOneLetter];
         return { params, text: this.getText(params) };
@@ -23,7 +24,7 @@ export class SizeOfAlphabet {
     }
 }
 
-export class LengthOfMSG {
+export class LengthOfMSG extends Task {
     static taskName = "Длина сообщения"
     static paramsLength = 2;
     static uses_calculator = true;
@@ -32,7 +33,7 @@ export class LengthOfMSG {
         return b / Math.log2(a | 0);
     }
 
-    static generate_task() {
+    static generateTask() {
         let a = randDouble(4, 8, (n) => Math.pow(2, n | 0));
         let b = randDouble(3, 7, (n) => Math.log2(a | 0) * (n | 0));
         let params = [a, b];
@@ -46,7 +47,7 @@ export class LengthOfMSG {
     }
 }
 
-export class Task3 {
+export class Task3 extends Task {
     static taskName = "Кол-во информации на экране"
     static paramsLength = 3;
     static uses_calculator = true;
@@ -55,7 +56,7 @@ export class Task3 {
         return a * b * Math.log2(c);
     }
 
-    static generate_task() {
+    static generateTask() {
         let a = randInt(2, 12, powerOfTwo);
         let b = randInt(2, 12, powerOfTwo);
         let c = randInt(1, 6, powerOfTwo);
@@ -71,7 +72,7 @@ export class Task3 {
     }
 }
 
-export class Task4 {
+export class Task4 extends Task {
     static taskName = "Максимальная энтропия системы"
     static paramsLength = 2;
     static uses_calculator = true;
@@ -80,7 +81,7 @@ export class Task4 {
         return a * Math.log2(b);
     }
 
-    static generate_task() {
+    static generateTask() {
         let a = randInt(2, 100, (n) => n | 0);
         let b = randInt(1, 6, powerOfTwo);
         let params = [a, b];
@@ -94,7 +95,7 @@ export class Task4 {
     }
 }
 
-export class Task5 {
+export class Task5 extends Task {
     static taskName = "Энтропия алфавита"
     static paramsLength = 2;
     static uses_calculator = true;
@@ -116,7 +117,7 @@ export class Task5 {
         return -sum;
     }
 
-    static generate_task() {
+    static generateTask() {
         let msgLength = 10;
         let alphabetSize = randInt(2, 4);
         let msg = Array(msgLength)

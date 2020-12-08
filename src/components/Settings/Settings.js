@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import './Settings.css'
 
-import allTasks from '../../Tasks/allTasks';
+import getAllTasks from '../../Tasks/allTasks';
 
+// console.log(Object.keys(allTasks))
+
+let allTasks = getAllTasks();
 let initialTasks = [...allTasks];
 
 function ThemeChooser({ name, id, setChecked }) {
@@ -60,7 +63,7 @@ function ThemeChooser({ name, id, setChecked }) {
 }
 
 function formatLink(pairs) {
-    let mainLink = `${window.location.origin}/test`;
+    let mainLink = `${window.location.origin}`;
 
     let params = pairs
         .filter((check) => check.number > 0)

@@ -284,8 +284,8 @@ const machineArithm = [
 
 
 export default function TestBlock({ tasks, answers }) {
-    const onAnswerEnter = (i, event) => {
-        tasks[i].taskUpdateAnswer(event.target.value);
+    const onAnswerEnter = (i, answer) => {
+        tasks[i].taskUpdateAnswer(answer);
     };
 
 
@@ -293,20 +293,18 @@ export default function TestBlock({ tasks, answers }) {
         <li className={'nes-container is-rounded'} key={i}>
             <div style={{ display: "inherit", width: "inherit", top: -15 }} className="nes-badge is-splited">
                 <span style={{width: "10%"}} className="is-success">{i+1}</span>
-                <span style={{width: "90%"}} className="is-dark">{tasks[i].taskClass.taskName}</span>
+                <span style={{width: "90%"}} className="is-dark">{task.taskClass.taskName}</span>
             </div>
             <Question
-                value={task.userAnswer}
                 keyId={i}
-                task={tasks[i]}
-                questionText={tasks[i].taskDescription.text}
-                onchange={(event) => onAnswerEnter(i, event)}
-                status={answers[i][1] ? AnswerStatus.RIGHT : AnswerStatus.NONE}
+                task={task}
+                onInputChange={(answer) => onAnswerEnter(i, answer)}
+                userAnswer={answers[i]}
             />
         </li>
     ));
 
-    let correctAnswers = answers.filter((a) => a[1]).length;
+    let correctAnswers = answers.filter((a) => a.mainAnswer.correct).length;
     return (
         <div className='App'>
             <ul> {tests} </ul>

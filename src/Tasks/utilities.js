@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 export function questinator(getParams) {
     return (strings, ...paramNums) => {
         return () => {
@@ -94,5 +96,20 @@ export function convertRadix(num, fromRadix, toRadix) {
 }
 
 export function isClass(o) {
+    // doesn't work
     return o.toString().startsWith('class');
+}
+
+export class UserAnswer {
+    constructor() {
+        this.mainAnswer = {
+            value: 0,
+            correct: false,
+        };
+        this.additionalProperties = {}
+    }
+
+    clone() {
+        return _.cloneDeep(this);
+    }
 }

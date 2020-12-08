@@ -1,6 +1,7 @@
 import { randInt, Table } from './utilities';
+import {Task} from "./task";
 
-export class Task6 {
+export class Task6 extends Task {
     static taskName = 'Равномерный двоичный код для передачи сообщения';
     static paramsLength = 2;
 
@@ -10,7 +11,7 @@ export class Task6 {
         return `${amountInfo};${volumeInfo}`;
     }
 
-    static generate_task() {
+    static generateTask() {
         let a = randInt(5, 70);
         let b = randInt(7, 20);
         let params = [a, b];
@@ -24,7 +25,7 @@ export class Task6 {
     }
 }
 
-export class Task7 {
+export class Task7 extends Task {
     static taskName = 'Минимальная разрядность равномерного троичного кода';
     static paramsLength = 1;
 
@@ -34,7 +35,7 @@ export class Task7 {
         return `${ternary};${binary}`;
     }
 
-    static generate_task() {
+    static generateTask() {
         let a = randInt(8, 88);
         let params = [a];
         return { params, text: this.getText(params) };
@@ -47,7 +48,7 @@ export class Task7 {
     }
 }
 
-export class SimpleCipherEncode {
+export class SimpleCipherEncode extends Task {
     static taskName = 'Кодирование с помощью простой замены';
     static paramsLength = 2;
     static uses_table = true;
@@ -58,7 +59,7 @@ export class SimpleCipherEncode {
             .join('');
     }
 
-    static generate_task() {
+    static generateTask() {
         let msgLength = 5;
         let alphabetSize = msgLength;
         let table = new Table(alphabetSize);
@@ -82,7 +83,7 @@ export class SimpleCipherEncode {
     }
 }
 
-export class HuffmanEncoding {
+export class HuffmanEncoding extends Task {
     static taskName = 'Кодирование методом Хаффмана';
     static paramsLength = 2;
     static uses_huffman_tree = true;
@@ -141,7 +142,7 @@ export class HuffmanEncoding {
         return this.solve(params).length === userAnswer.length;
     }
 
-    static generate_task() {
+    static generateTask() {
         let msgLength = 10;
         let alphabetSize = randInt(5, 8);
         let msg = Array(msgLength)
