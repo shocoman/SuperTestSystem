@@ -1,5 +1,6 @@
 import { randInt, Table } from './utilities';
-import {Task} from "./task";
+import { Task } from './task';
+import _ from 'lodash';
 
 export class Task6 extends Task {
     static taskName = 'Равномерный двоичный код для передачи сообщения';
@@ -128,23 +129,102 @@ export class HuffmanEncoding extends Task {
             nodes.push([node, c1 + c2]);
             nodes = nodes.sort(([k1, v1], [k2, v2]) => v2 - v1);
         }
+        const root = nodes[0];
 
-        const huffmanCode = huffman_code_tree(nodes[0][0]);
-        let answer = Array.from(msg)
-            .map((ch) => huffmanCode[ch])
-            .join('');
-        // console.log(msg, huffmanCode, freq, answer);
-
-        return answer;
+        const huffmanCode = huffman_code_tree(root[0]);
+        return {
+            mainAnswer: Array.from(msg)
+                .map((ch) => huffmanCode[ch])
+                .join(''),
+            tree: root,
+            huffmanCode,
+        };
     }
 
-    static check_solution(params, userAnswer) {
-        return this.solve(params).length === userAnswer.length;
+    static checkTree(tree) {
+        if (tree?.length === 1) {
+            let nodes = [];
+            const collectNodes = (node, depth) => {
+                nodes.push({
+                    code: node.code,
+                    depth,
+                    title: node.title,
+                    prob: node.prob,
+                    temporary: node.temporary,
+                });
+
+                if (node.children) for (let ch of node.children) collectNodes(ch, depth + 1);
+            };
+            collectNodes(tree[0], 0);
+
+            nodes.sort((a, b) => {
+                return a.prob === b.prob ? a.depth - b.depth : a.prob - b.prob;
+            });
+
+            for (let i = 0; i < nodes.length; i++) {
+                let node_a = nodes[i];
+
+                if (node_a.code.length === 0 && !node_a.temporary) return false;
+
+                for (let j = i + 1; j < nodes.length; j++) {
+                    let node_b = nodes[j];
+
+                    let prob_a = Math.floor(node_a.prob * 1000) / 1000,
+                        prob_b = Math.floor(node_b.prob * 1000) / 1000;
+
+                    if (
+                        node_a.code.length * node_b.code.length > 0 &&
+                        node_a.depth < node_b.depth &&
+                        prob_a < prob_b
+                    ) {
+                        // console.log('Something wrong with nodes:', nodes[i], nodes[j]);
+                        return false;
+                    }
+                }
+            }
+        } else {
+            return false;
+        }
+        return true;
+    }
+
+    static decodeMessage([msg], userAnswer) {
+        let nodes = [];
+        const collectNodes = (node, depth) => {
+            nodes.push(node);
+            if (node.children) for (let ch of node.children) collectNodes(ch, depth + 1);
+        };
+        collectNodes(userAnswer.additionalProperties.tree[0], 0);
+
+        let letters = {};
+        for (let n of nodes) {
+            if (!n.temporary) {
+                letters[n.title] = n.code;
+            }
+        }
+        return Array.from(msg)
+            .map((char) => letters[char])
+            .join('');
+    }
+
+    static reduce(taskDescription, userAnswer) {
+        let { mainAnswer, tree, huffmanCode } = this.solve(taskDescription.params);
+
+        let treeIsCorrect = this.checkTree(userAnswer.additionalProperties?.tree);
+        let isCorrect = false;
+        if (treeIsCorrect) {
+            let decoded_msg = this.decodeMessage(taskDescription.params, userAnswer);
+            if (decoded_msg === userAnswer.mainAnswer.value.toString()) isCorrect = true;
+        }
+
+        let answer = _.cloneDeep(userAnswer);
+        answer.mainAnswer.correct = isCorrect;
+        return answer;
     }
 
     static generateTask() {
         let msgLength = 10;
-        let alphabetSize = randInt(5, 8);
+        let alphabetSize = randInt(3, 6);
         let msg = Array(msgLength)
             .fill(0)
             .map((ch) =>

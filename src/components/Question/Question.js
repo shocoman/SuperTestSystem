@@ -47,7 +47,13 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
                     onChange={onAdditionalComponentChange}
                 />
             )}
-            {task.taskClass.uses_huffman_tree && HuffmanTree(task.taskDescription.params)}
+            {task.taskClass.uses_huffman_tree && (
+                <HuffmanTree
+                    params={task.taskDescription.params}
+                    userAnswer={userAnswer}
+                    onChange={onAdditionalComponentChange}
+                />
+            )}
 
             <div className='inputField'>
                 <label htmlFor='answerField'> Введите ответ: </label>

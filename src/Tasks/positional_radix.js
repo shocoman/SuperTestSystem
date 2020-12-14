@@ -43,10 +43,6 @@ export class ConvertDecimalToN extends Task {
         return answer;
     }
 
-    static check_solution(params, userAnswer) {
-        return this.solve(params).mainAnswer === userAnswer;
-    }
-
     static generateTask() {
         let number = randInt(1, 1024);
         let base = randInt(2, 17, (a) => (a === 10 ? 11 : a));

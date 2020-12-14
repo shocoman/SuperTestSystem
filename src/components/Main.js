@@ -3,6 +3,8 @@ import React from 'react';
 import { BrowserRouter, Link, Route, Switch, HashRouter } from 'react-router-dom';
 import Settings from './Settings/Settings';
 import 'nes.css/css/nes.min.css';
+import _ from "lodash"; // This only needs to be imported once in your app
+
 
 export default function Main() {
     return (

@@ -1,14 +1,15 @@
 import React, { Component, useState } from 'react';
 import SortableTree, { walk } from 'react-sortable-tree';
 import SortableTreeFullDragTheme from 'react-sortable-tree-theme-full-node-drag';
-import 'react-sortable-tree/style.css'; // This only needs to be imported once in your app
-
-let id_count = 0;
+import 'react-sortable-tree/style.css';
+import _ from 'lodash'; // This only needs to be imported once in your app
 
 function getNodeKey({ node, treeIndex }) {
     // return node.title + '_' + treeIndex.toString();
     return node.id;
 }
+
+let id_count = 0;
 
 function makeNode(title, prob, temporary = false) {
     return {
@@ -21,22 +22,27 @@ function makeNode(title, prob, temporary = false) {
     };
 }
 
-export default function HuffmanTree([msg]) {
-    const [treeData, setTreeData] = useState(() => {
+export default function HuffmanTree({ params: [msg], userAnswer, onChange }) {
+    const initTreeState = () => {
         let freq = {};
         for (let ch of Array.from(msg)) {
             freq[ch] = freq[ch] ? freq[ch] + 1 : 1;
         }
-
         return Object.entries(freq).map(([char, frequency]) =>
             makeNode(char, frequency / msg.length)
         );
-        // return [ makeNode('A', 0.3),  makeNode('B', 0.3),  makeNode('C', 0.1),  makeNode('D', 0.2),  makeNode('E', 0.1), ]
-    });
+    };
+
+
+    const treeData = userAnswer.additionalProperties?.tree ?? initTreeState();
+    const setTreeData = (data) => {
+        let answer = _.cloneDeep(userAnswer);
+        answer.additionalProperties.tree = data;
+        onChange(answer);
+    };
 
     const canDrop = (params) => {
         const { nextParent } = params;
-
         return !(nextParent && (!nextParent.temporary || nextParent.children.length > 2));
     };
 
@@ -57,36 +63,36 @@ export default function HuffmanTree([msg]) {
             if (n != null) {
                 n.prob = n.children.reduce((acc, curr) => acc + curr.prob, 0);
                 n.title =
-                    '{ ' + n.children.reduce((acc, curr) => acc + curr.title + ' ', ' ') + ' }';
+                    '{ ' + n.children.reduce((acc, curr) => acc + curr.title + ' ', '') + ' }';
             }
         }
 
         if (!nextParentNode || !nextParentNode.temporary) return;
         nextParentNode.prob = nextParentNode.children.reduce((acc, curr) => acc + curr.prob, 0);
         nextParentNode.title = `{${nextParentNode.children.reduce(
-            (acc, curr) => acc + curr.title + '',
+            (acc, curr) => acc + curr.title,
             ''
         )}}`;
 
-        const mywalk = (node, code) => {
+        const recursiveNaming = (node, code) => {
             node.code = code;
             if (node.children && node.children.length >= 1) {
-                mywalk(node.children[0], code + '0');
+                recursiveNaming(node.children[0], code + '0');
                 if (node.children.length >= 2) {
-                    mywalk(node.children[1], code + '1');
+                    recursiveNaming(node.children[1], code + '1');
                 }
             }
         };
 
-        for (let i = 0; i < treeData.length; ++i) mywalk(treeData[i], '');
+        let treeDataCopy = _.cloneDeep(treeData);
+        for (let i = 0; i < treeData.length; ++i) recursiveNaming(treeDataCopy[i], '');
+        setTreeData(treeDataCopy);
     };
 
     const onClick = (e) => {
-        setTreeData((prevTree) => {
-            let next = [...prevTree];
-            next.push(makeNode('TMP', 0.0, true));
-            return next;
-        });
+        let next = _.cloneDeep(treeData);
+        next.push(makeNode('TMP', 0.0, true));
+        setTreeData(next);
     };
 
     return (
@@ -94,13 +100,13 @@ export default function HuffmanTree([msg]) {
             className={'nes-container is-rounded with-title'}
             style={{ height: '600px', marginTop: 20, paddingBottom: 100 }}
         >
-            <p className={'title'}>Редактор деревьев</p>
+            <p className={'title '}>Редактор деревьев</p>
             <button className={'nes-btn'} style={{ margin: '20px' }} onClick={onClick}>
                 Добавить узел-связку
             </button>
             <SortableTree
                 treeData={treeData}
-                onChange={(treeData) => setTreeData(treeData)}
+                onChange={setTreeData}
                 onMoveNode={onMoveNode}
                 canDrop={canDrop}
                 getNodeKey={getNodeKey}
