@@ -1,9 +1,6 @@
 import React, { useState } from 'react';
 import './Settings.css'
-
-import getAllTasks from '../../Tasks/allTasks';
-
-// console.log(Object.keys(allTasks))
+import getAllTasks from '../../Tasks/_LoadAllTasks';
 
 let allTasks = getAllTasks();
 let initialTasks = [...allTasks];

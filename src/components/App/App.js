@@ -3,9 +3,7 @@ import TestBlock from '../TestBlock/TestBlock';
 import './App.css';
 import _ from 'lodash';
 
-import getAllTasks from '../../Tasks/allTasks';
-import { ConvertDecimalFloatToN, ConvertDecimalToN } from '../../Tasks/positional_radix';
-import { HuffmanEncoding } from '../../Tasks/basic_encoding';
+import getAllTasks from '../../Tasks/_LoadAllTasks';
 import { UserAnswer } from '../../Tasks/utilities';
 
 let allTasks = getAllTasks();
@@ -31,9 +29,6 @@ function initInitialTasks(initialTasks) {
 
     if (initialTasks.length === 0) {
         initialTasks.push(...allTasks);
-        // initialTasks.push(ConvertDecimalToN);
-        // initialTasks.push(HuffmanEncoding);
-        // initialTasks.push(ConvertDecimalFloatToN);
     }
 }
 
@@ -46,10 +41,9 @@ const createInitialTasks = (setTaskAnswers) =>
             taskDescription,
             taskUpdateAnswer: (userAnswer) => {
                 setTaskAnswers((prevTaskAnswers) => {
-                    // let newTaskAnswers = prevTaskAnswers.map((answer) => _.cloneDeep(answer));
-                    let newTaskAnswers = _.cloneDeep(prevTaskAnswers);
-                    newTaskAnswers[index] = task.reduce(taskDescription, userAnswer);
-                    return newTaskAnswers;
+                    let taskAnswers = _.cloneDeep(prevTaskAnswers);
+                    taskAnswers[index] = task.checkAnswerAndReduce(taskDescription, userAnswer);
+                    return taskAnswers;
                 });
             },
         };

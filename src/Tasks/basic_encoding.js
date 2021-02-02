@@ -1,8 +1,8 @@
 import { randInt, Table } from './utilities';
-import { Task } from './task';
+import { ProtoTask } from './_ProtoTask';
 import _ from 'lodash';
 
-export class Task6 extends Task {
+export class Task6 extends ProtoTask {
     static taskName = 'Равномерный двоичный код для передачи сообщения';
     static paramsLength = 2;
 
@@ -26,7 +26,7 @@ export class Task6 extends Task {
     }
 }
 
-export class Task7 extends Task {
+export class Task7 extends ProtoTask {
     static taskName = 'Минимальная разрядность равномерного троичного кода';
     static paramsLength = 1;
 
@@ -49,7 +49,7 @@ export class Task7 extends Task {
     }
 }
 
-export class SimpleCipherEncode extends Task {
+export class SimpleCipherEncode extends ProtoTask {
     static taskName = 'Кодирование с помощью простой замены';
     static paramsLength = 2;
     static uses_table = true;
@@ -84,7 +84,7 @@ export class SimpleCipherEncode extends Task {
     }
 }
 
-export class HuffmanEncoding extends Task {
+export class HuffmanEncoding extends ProtoTask {
     static taskName = 'Кодирование методом Хаффмана';
     static paramsLength = 2;
     static uses_huffman_tree = true;
@@ -207,7 +207,7 @@ export class HuffmanEncoding extends Task {
             .join('');
     }
 
-    static reduce(taskDescription, userAnswer) {
+    static checkAnswerAndReduce(taskDescription, userAnswer) {
         let { mainAnswer, tree, huffmanCode } = this.solve(taskDescription.params);
 
         let treeIsCorrect = this.checkTree(userAnswer.additionalProperties?.tree);
@@ -218,7 +218,9 @@ export class HuffmanEncoding extends Task {
         }
 
         let answer = _.cloneDeep(userAnswer);
+        answer.additionalProperties.treeIsCorrect = treeIsCorrect;
         answer.mainAnswer.correct = isCorrect;
+
         return answer;
     }
 

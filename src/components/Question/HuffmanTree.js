@@ -95,12 +95,18 @@ export default function HuffmanTree({ params: [msg], userAnswer, onChange }) {
         setTreeData(next);
     };
 
+    let treeIsCorrect = userAnswer.additionalProperties?.treeIsCorrect ?? false;
+
+    let containerTitle = treeIsCorrect ?
+        (<p className={'title'} style={{color: "green"}}>Редактор деревьев (Дерево построено верно!) </p>)
+        : (<p className={'title'}>Редактор деревьев</p>);
+
     return (
         <div
             className={'nes-container is-rounded with-title'}
             style={{ height: '600px', marginTop: 20, paddingBottom: 100 }}
         >
-            <p className={'title '}>Редактор деревьев</p>
+            {containerTitle}
             <button className={'nes-btn'} style={{ margin: '20px' }} onClick={onClick}>
                 Добавить узел-связку
             </button>

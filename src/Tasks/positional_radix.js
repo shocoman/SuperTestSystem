@@ -1,8 +1,8 @@
 import { convertRadix, digitToChar, randBool, randInt } from './utilities';
-import { Task } from './task';
+import { ProtoTask } from './_ProtoTask';
 import _ from 'lodash';
 
-export class ConvertDecimalToN extends Task {
+export class ConvertDecimalToN extends ProtoTask {
     static taskName = 'Конвертация из десятичной СС';
     static paramsLength = 2;
     static uses_calculator = true;
@@ -26,7 +26,7 @@ export class ConvertDecimalToN extends Task {
         };
     }
 
-    static reduce(taskDescription, userAnswer) {
+    static checkAnswerAndReduce(taskDescription, userAnswer) {
         let answer = _.cloneDeep(userAnswer);
         let { mainAnswer, table } = this.solve(taskDescription.params);
         answer.mainAnswer.correct =
@@ -57,7 +57,7 @@ export class ConvertDecimalToN extends Task {
     }
 }
 
-export class ConvertNtoDecimal extends Task {
+export class ConvertNtoDecimal extends ProtoTask {
     static taskName = 'Конвертация в десятичную СС';
     static paramsLength = 2;
     static uses_calculator = true;
@@ -80,7 +80,7 @@ export class ConvertNtoDecimal extends Task {
     }
 }
 
-export class ConvertDecimalFloatToN extends Task {
+export class ConvertDecimalFloatToN extends ProtoTask {
     static taskName = 'Конвертация дроби из десятичной СС в двоичную';
     static paramsLength = 2;
     static uses_float_convert_table = true;
@@ -98,12 +98,16 @@ export class ConvertDecimalFloatToN extends Task {
                 answer += 1;
             }
         }
-        // console.log(answer);
         return answer;
     }
 
-    static check_solution(params, userAnswer) {
-        return this.solve(params).toString() === userAnswer.toString().replace('0.', '');
+    static checkAnswerAndReduce(taskDescription, userAnswer) {
+        const userAnswerString = userAnswer.mainAnswer.value.toString().replace('0.', '');
+        const correctAnswer = this.solve(taskDescription.params).toString();
+        const isCorrect = correctAnswer === userAnswerString;
+        let answer = _.cloneDeep(userAnswer);
+        answer.mainAnswer.correct = isCorrect;
+        return answer;
     }
 
     static generateTask() {

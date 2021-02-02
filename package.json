@@ -1,5 +1,5 @@
 {
-  "name": "react_test_1",
+  "name": "informatique_testing",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -17,7 +17,9 @@
     "react-sortable-tree": "^2.8.0",
     "react-sortable-tree-theme-full-node-drag": "^1.1.0",
     "query-string": "^6.13.7",
-    "lodash": "^4.17.20"
+    "lodash": "^4.17.20",
+    "reactjs-popup": "^2.0.4",
+    "bootstrap-pixel-icons": "^0.2.0"
   },
   "scripts": {
     "start": "react-scripts start",

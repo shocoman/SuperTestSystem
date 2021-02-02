@@ -6,6 +6,7 @@ import { ExpressionEvaluator } from './ExpressionEvaluator';
 import HuffmanTree from './HuffmanTree';
 import _ from 'lodash';
 import { UserAnswer } from '../../Tasks/utilities';
+import InfoPopup from './InfoPopup';
 
 export const AnswerStatus = Object.freeze({
     WRONG: 1,
@@ -27,7 +28,9 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
     const className = 'nes-input ' + (userAnswer.mainAnswer.correct ? 'is-success' : '');
     return (
         <div className='testCard'>
-            <div className='questionText'>{task.taskDescription.text}</div>
+            <div className='questionText'>
+                {task.taskDescription.text}
+            </div>
 
             {task.taskClass.uses_table && formatTable(task.taskDescription.params)}
             {task.taskClass.uses_calculator && ExpressionEvaluator()}
@@ -64,6 +67,7 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
                     onChange={onMainInputChange}
                     className={className}
                 />
+                <InfoPopup msg={task.taskClass.additionalInformation()} />
                 <i className='nes-kirby' />
             </div>
         </div>

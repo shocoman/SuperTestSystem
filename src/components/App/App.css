@@ -9,8 +9,6 @@
     /*font-size: calc(10px + 2vmin);*/
     /*color: white;*/
 
-
-
 }
 
 .App-link {
@@ -35,7 +33,6 @@
 }
 
 
-
 .chooseTestType button {
     font-size: 1.2rem;
     padding: 1.2rem;
@@ -50,7 +47,6 @@
 .chooseTestType button:last-child {
     border-radius: 0px 0px 10px 10px;
 }
-
 
 .chooseTestType label {
     font-size: 2rem;

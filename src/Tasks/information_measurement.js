@@ -1,14 +1,18 @@
 import { powerOfTwo, randDouble, randInt } from './utilities';
-import {Task} from "./task";
+import {ProtoTask} from "./_ProtoTask";
 
 
-export class SizeOfAlphabet extends Task {
+export class SizeOfAlphabet extends ProtoTask {
     static taskName = "Размер алфавита"
     static paramsLength = 1;
     static uses_calculator = true;
 
     static solve([bitsInOneLetter]) {
         return Math.pow(2, bitsInOneLetter);
+    }
+
+    static additionalInformation() {
+        return 'Some text info';
     }
 
     static generateTask() {
@@ -24,7 +28,7 @@ export class SizeOfAlphabet extends Task {
     }
 }
 
-export class LengthOfMSG extends Task {
+export class LengthOfMSG extends ProtoTask {
     static taskName = "Длина сообщения"
     static paramsLength = 2;
     static uses_calculator = true;
@@ -47,7 +51,7 @@ export class LengthOfMSG extends Task {
     }
 }
 
-export class Task3 extends Task {
+export class Task3 extends ProtoTask {
     static taskName = "Кол-во информации на экране"
     static paramsLength = 3;
     static uses_calculator = true;
@@ -72,7 +76,7 @@ export class Task3 extends Task {
     }
 }
 
-export class Task4 extends Task {
+export class Task4 extends ProtoTask {
     static taskName = "Максимальная энтропия системы"
     static paramsLength = 2;
     static uses_calculator = true;
@@ -95,7 +99,7 @@ export class Task4 extends Task {
     }
 }
 
-export class Task5 extends Task {
+export class Task5 extends ProtoTask {
     static taskName = "Энтропия алфавита"
     static paramsLength = 2;
     static uses_calculator = true;
