@@ -12,7 +12,6 @@ export default function ConvertDecimalTable({
         { value: '', correct: false },
         { value: '', correct: false },
     ];
-    // const [rows, setRows] = useState([]);
     let rows = userAnswer.additionalProperties?.table ?? [emptyRow];
 
     const setRows = (getNewRows) => {

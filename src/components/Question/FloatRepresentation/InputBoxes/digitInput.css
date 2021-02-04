@@ -1,0 +1,30 @@
+.digitInputField {
+  border: gray 1px solid;
+  border-left: 0;
+  min-width: 0px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+.digitInputField:first-child {
+  border-radius: 10px 0 0 0;
+  border-left: gray 1px solid;
+}
+.digitInputField:last-child {
+  border-radius: 0 10px 0 0;
+}
+.digitInput {
+  justify-content: space-between;
+  text-align: center;
+  font-size: 30px;
+  border: 0;
+  border-top: gray 1px solid;
+  caret-color: transparent;
+  user-select: none;
+}
+.plusButton,
+.minusButton {
+  font-weight: bolder;
+  user-select: none;
+}
+/*# sourceMappingURL=digitInput.css.map */

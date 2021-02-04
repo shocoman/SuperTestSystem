@@ -1,4 +1,4 @@
-import { convertRadix, digitToChar, randBool, randInt } from './utilities';
+import { convertRadix, digitToChar, randBool, randDouble, randInt } from './utilities';
 import { ProtoTask } from './_ProtoTask';
 import _ from 'lodash';
 
@@ -22,7 +22,7 @@ export class ConvertDecimalToN extends ProtoTask {
                 .map((a) => digitToChar(a))
                 .reverse()
                 .join(''),
-            table: intParts.map((a, i) => [a, remainderParts[i]]),
+            table: intParts.map((a, i) => [a, remainderParts[i]])
         };
     }
 
@@ -36,7 +36,7 @@ export class ConvertDecimalToN extends ProtoTask {
         answer.additionalProperties.table = userAnswer.additionalProperties.table.map(
             ([fst_col, snd_col], i) => [
                 { ...fst_col, correct: table[i] && fst_col.value === table[i][0].toString() },
-                { ...snd_col, correct: table[i] && snd_col.value === table[i][1].toString() },
+                { ...snd_col, correct: table[i] && snd_col.value === table[i][1].toString() }
             ]
         );
 
@@ -130,3 +130,103 @@ export class ConvertDecimalFloatToN extends ProtoTask {
         return `Перевести число с плавающей запятой ${params[0]} из десятичной системы в СС с основанием ${params[1]}.`;
     }
 }
+
+
+export class FloatRepresentationTask extends ProtoTask {
+    static taskName = 'Представление чисел с плавающей запятой';
+    static paramsLength = 1;
+    static uses_calculator = true;
+    static uses_float_grid = true;
+
+    static solve([numberString]) {
+        let num = 0;
+        switch (numberString) {
+            case '-Infinity':
+                num = -Infinity;
+                break;
+            case 'Infinity':
+                num = Infinity;
+                break;
+            case '0':
+                num = 0;
+                break;
+            case 'NaN':
+                num = NaN;
+                break;
+            default:
+                num = Number.parseFloat(numberString);
+                break;
+        }
+        const answer = this.FloatToIEEE(num);
+        return answer;
+    }
+
+    static FloatToIEEE(f) {
+        let buf = new ArrayBuffer(8);
+        (new Float32Array(buf))[0] = f;
+        return ((new Uint32Array(buf))[0] >>> 0).toString(2).padStart(32, '0');
+    }
+
+    static IEEEToDouble(f) {
+        let buffer = new ArrayBuffer(8);
+        (new Uint32Array(buffer))[0] = Number.parseInt(f, 2);
+        return new Float32Array(buffer)[0];
+    }
+
+
+    static additionalInformation() {
+        return 'Для выбора нужных битов воспользуйтесь двумя стрелками в нижнем правом углу разрядной сетки';
+    }
+
+    static checkAnswerAndReduce(taskDescription, userAnswer) {
+        const correctAnswer = this.solve(taskDescription.params).toString();
+        console.log('Correct answer: ', correctAnswer);
+
+        let mainAnswerIsCorrect = correctAnswer === userAnswer.mainAnswer.value.toString();
+        let selectedBitsAreCorrect = true;
+        let enteredNumberIsCorrect = true;
+
+        const selectedBits = userAnswer.additionalProperties.float_grid.selectedBits;
+        const enteredNumber = userAnswer.additionalProperties.float_grid.enteredNumber;
+
+        if (!selectedBits) selectedBitsAreCorrect = false;
+        else if ([...selectedBits].sort().toString() !== [24, 31].toString()) selectedBitsAreCorrect = false;
+
+        if (!enteredNumber) enteredNumberIsCorrect = false;
+        if (enteredNumber !== correctAnswer) enteredNumberIsCorrect = false;
+        if (!selectedBitsAreCorrect || !enteredNumberIsCorrect) mainAnswerIsCorrect = false;
+
+        let answer = _.cloneDeep(userAnswer);
+        answer.mainAnswer.correct = mainAnswerIsCorrect;
+        answer.additionalProperties.float_grid.correct = enteredNumberIsCorrect;
+        answer.additionalProperties.float_grid.bitsCorrect = selectedBitsAreCorrect;
+
+        return answer;
+    }
+
+    static generateTask() {
+        let specialCases = ['-Infinity', 'Infinity', '0', 'NaN'];
+        let useSpecialCase = randDouble(0, 1.0) < 0.3;
+
+        let length = randInt(0, 4);
+        let number = 0;
+        for (let i = 0; i < length; i++) {
+            number += randBool() ? Math.pow(2, -i - 1) : 0;
+        }
+        number += randInt(0, 32);
+        if (randBool()) number *= -1;
+
+        let toConvert = useSpecialCase ? specialCases[randInt(0, 4)] : number.toString();
+        let params = [toConvert];
+        return { params, text: this.getText(params) };
+    }
+
+    static getText(params) {
+        // +-Inf, 0, NaN
+        for (let i = 0; i < this.paramsLength; ++i)
+            params[i] = params[i] ?? String.fromCharCode('A'.charCodeAt(0) + i);
+        return `Выберите диапазон битов, выделенных для экспоненты в представлении числа с плавающей запятой.
+         А также запишите '${params[0]}' в эту разрядную сетку согласно правилам.`;
+    }
+}
+

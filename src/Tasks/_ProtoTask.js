@@ -9,6 +9,7 @@ export class ProtoTask {
     static uses_calculator;
     static uses_convert_table;
     static uses_float_convert_table;
+    static uses_float_grid;
 
     // interface
     static solve(params) {
@@ -32,7 +33,6 @@ export class ProtoTask {
     }
 
     static checkAnswerAndReduce(taskDescription, userAnswer) {
-        // let isCorrect = this.check_solution(taskDescription.params, userAnswer.mainAnswer.value);
         let isCorrect = this.solve(taskDescription.params).toString() === userAnswer.mainAnswer.value.toString();
         let answer = _.cloneDeep(userAnswer);
         answer.mainAnswer.correct = isCorrect;

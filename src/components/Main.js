@@ -7,6 +7,7 @@ import _ from "lodash";
 
 
 export default function Main() {
+
     return (
         <div className={'root'}>
             <HashRouter>

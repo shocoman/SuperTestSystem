@@ -7,6 +7,7 @@ import HuffmanTree from './HuffmanTree';
 import _ from 'lodash';
 import { UserAnswer } from '../../Tasks/utilities';
 import InfoPopup from './InfoPopup';
+import FloatRepresentation from "./FloatRepresentation/FloatRepresentation";
 
 export const AnswerStatus = Object.freeze({
     WRONG: 1,
@@ -32,6 +33,14 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
                 {task.taskDescription.text}
             </div>
 
+            {task.taskClass.uses_float_grid &&
+                <FloatRepresentation
+                    params={task.taskDescription.params}
+                    userAnswer={userAnswer}
+                    onChange={onAdditionalComponentChange}
+                    gridSize={32}
+                />
+            }
             {task.taskClass.uses_table && formatTable(task.taskDescription.params)}
             {task.taskClass.uses_calculator && ExpressionEvaluator()}
             {task.taskClass.uses_convert_table && (

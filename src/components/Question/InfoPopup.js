@@ -18,7 +18,7 @@ export default function InfoPopup({ msg }) {
             position={'left bottom'}
             on='hover'
             closeOnDocumentClick
-            mouseLeaveDelay={300}
+            mouseLeaveDelay={100}
             mouseEnterDelay={0}
         >
             <div style={{ width: '300px' }}>
