@@ -7,15 +7,17 @@ import HuffmanTree from './HuffmanTree';
 import _ from 'lodash';
 import { UserAnswer } from '../../Tasks/utilities';
 import InfoPopup from './InfoPopup';
-import FloatRepresentation from "./FloatRepresentation/FloatRepresentation";
+import FloatRepresentation from './FloatRepresentation/FloatRepresentation';
 
 export const AnswerStatus = Object.freeze({
     WRONG: 1,
     NONE: 2,
-    RIGHT: 3,
+    RIGHT: 3
 });
 
-export default function Question({ onInputChange, keyId, userAnswer, task }) {
+export default function Question({ checkCorrectAnswer, onInputChange, keyId, userAnswer, task }) {
+
+
     const onMainInputChange = (e) => {
         let u = _.cloneDeep(userAnswer);
         u.mainAnswer.value = e.target.value;
@@ -26,7 +28,7 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
         onInputChange(answer);
     };
 
-    const className = 'nes-input ' + (userAnswer.mainAnswer.correct ? 'is-success' : '');
+    const className = 'nes-input ' + (checkCorrectAnswer && userAnswer.mainAnswer.correct ? 'is-success' : '');
     return (
         <div className='testCard'>
             <div className='questionText'>
@@ -34,12 +36,13 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
             </div>
 
             {task.taskClass.uses_float_grid &&
-                <FloatRepresentation
-                    params={task.taskDescription.params}
-                    userAnswer={userAnswer}
-                    onChange={onAdditionalComponentChange}
-                    gridSize={32}
-                />
+            (<FloatRepresentation
+                params={task.taskDescription.params}
+                userAnswer={userAnswer}
+                onChange={onAdditionalComponentChange}
+                gridSize={32}
+                checkCorrectAnswer={checkCorrectAnswer}
+            />)
             }
             {task.taskClass.uses_table && formatTable(task.taskDescription.params)}
             {task.taskClass.uses_calculator && ExpressionEvaluator()}
@@ -49,6 +52,7 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
                     params={task.taskDescription.params}
                     userAnswer={userAnswer}
                     onChange={onAdditionalComponentChange}
+                    checkCorrectAnswer={checkCorrectAnswer}
                 />
             )}
             {task.taskClass.uses_float_convert_table && (
@@ -57,6 +61,7 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
                     params={task.taskDescription.params}
                     userAnswer={userAnswer}
                     onChange={onAdditionalComponentChange}
+                    checkCorrectAnswer={checkCorrectAnswer}
                 />
             )}
             {task.taskClass.uses_huffman_tree && (
@@ -64,6 +69,7 @@ export default function Question({ onInputChange, keyId, userAnswer, task }) {
                     params={task.taskDescription.params}
                     userAnswer={userAnswer}
                     onChange={onAdditionalComponentChange}
+                    checkCorrectAnswer={checkCorrectAnswer}
                 />
             )}
 

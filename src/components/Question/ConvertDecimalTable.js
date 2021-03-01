@@ -3,14 +3,14 @@ import { digitToChar } from '../../Tasks/utilities';
 import _ from 'lodash';
 
 export default function ConvertDecimalTable({
-    floatConvert,
-    params: [convertible, radix],
-    userAnswer,
-    onChange,
-}) {
+                                                floatConvert,
+                                                params: [convertible, radix],
+                                                userAnswer,
+                                                onChange, checkCorrectAnswer
+                                            }) {
     const emptyRow = [
         { value: '', correct: false },
-        { value: '', correct: false },
+        { value: '', correct: false }
     ];
     let rows = userAnswer.additionalProperties?.table ?? [emptyRow];
 
@@ -66,44 +66,44 @@ export default function ConvertDecimalTable({
         <table className='nes-table is-bordered is-centered'>
             <caption style={{ captionSide: 'top' }}>Таблица перевода</caption>
             <thead>
-                {floatConvert ? (
-                    <tr>
-                        <td>Целая часть</td>
-                        <td>
-                            Дробная часть ({convertible} * {radix})
-                        </td>
-                    </tr>
-                ) : (
-                    <tr>
-                        <td>Делимое</td>
-                        <td>Остаток</td>
-                    </tr>
-                )}
+            {floatConvert ? (
+                <tr>
+                    <td>Целая часть</td>
+                    <td>
+                        Дробная часть ({convertible} * {radix})
+                    </td>
+                </tr>
+            ) : (
+                <tr>
+                    <td>Делимое</td>
+                    <td>Остаток</td>
+                </tr>
+            )}
             </thead>
             <tbody>
-                {rows.map(
-                    ([{ value: a, correct: a_correct }, { value: b, correct: b_correct }], i) => (
-                        <tr key={i}>
-                            <td>
-                                <input
-                                    value={a}
-                                    onChange={(e) => onRowChange(0, i, e)}
-                                    onKeyDown={(e) => onRowKeyPressed(i, e)}
-                                    className={'nes-input ' + (a_correct ? 'is-success' : '')}
-                                    style={{ textAlign: 'right' }}
-                                />
-                            </td>
-                            <td>
-                                <input
-                                    value={b}
-                                    onChange={(e) => onRowChange(1, i, e)}
-                                    onKeyDown={(e) => onRowKeyPressed(i, e)}
-                                    className={'nes-input ' + (b_correct ? 'is-success' : '')}
-                                />
-                            </td>
-                        </tr>
-                    )
-                )}
+            {rows.map(
+                ([{ value: a, correct: a_correct }, { value: b, correct: b_correct }], i) => (
+                    <tr key={i}>
+                        <td>
+                            <input
+                                value={a}
+                                onChange={(e) => onRowChange(0, i, e)}
+                                onKeyDown={(e) => onRowKeyPressed(i, e)}
+                                className={'nes-input ' + (a_correct ? 'is-success' : '')}
+                                style={{ textAlign: 'right' }}
+                            />
+                        </td>
+                        <td>
+                            <input
+                                value={b}
+                                onChange={(e) => onRowChange(1, i, e)}
+                                onKeyDown={(e) => onRowKeyPressed(i, e)}
+                                className={'nes-input ' + (b_correct ? 'is-success' : '')}
+                            />
+                        </td>
+                    </tr>
+                )
+            )}
             </tbody>
         </table>
     );
@@ -111,7 +111,7 @@ export default function ConvertDecimalTable({
     return (
         <div className={'convertTable '}>
             {convertTable}
-            {decodedNumber !== '' && <div>Возможный ответ: {decodedNumber}</div>}
+            {checkCorrectAnswer && decodedNumber !== '' && <div>Возможный ответ: {decodedNumber}</div>}
         </div>
     );
 }

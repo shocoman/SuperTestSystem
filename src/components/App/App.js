@@ -45,20 +45,28 @@ const createInitialTasks = (setTaskAnswers) =>
                     taskAnswers[index] = task.checkAnswerAndReduce(taskDescription, userAnswer);
                     return taskAnswers;
                 });
-            },
+            }
         };
     });
 
 function App() {
+
     const [taskAnswers, setTaskAnswers] = useState(
         new Array(initialTasks.length).fill(0).map((_) => new UserAnswer())
     );
     const [tasks, setTasks] = useState((_) => createInitialTasks(setTaskAnswers));
+    const [dontCheckCorrectAnswer] = useState(() => {
+        let url = new URL(window.location.href);
+        for (let [k, _] of url.searchParams)
+            if (k === 'dontCheckCorrectAnswers')
+                return true;
+        return false;
+    });
 
     return (
         <div className={'root'}>
             <div className='TestBlock'>
-                <TestBlock tasks={tasks} answers={taskAnswers} />
+                <TestBlock tasks={tasks} answers={taskAnswers} checkCorrectAnswer={!dontCheckCorrectAnswer} />
             </div>
         </div>
     );

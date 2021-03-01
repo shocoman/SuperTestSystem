@@ -5,7 +5,7 @@ import './SliderHandle.css';
 import _ from 'lodash';
 
 export default function FloatRepresentation({
-                                                params: [toConvert], userAnswer, onChange, gridSize
+                                                params: [toConvert], userAnswer, onChange, gridSize, checkCorrectAnswer
                                             }) {
     let answer = _.cloneDeep(userAnswer);
     if (answer.additionalProperties.float_grid === undefined)
@@ -75,9 +75,11 @@ export default function FloatRepresentation({
 
             </div>
 
-            {<div>Возможный ответ: {enteredNumber}</div>}
-            {selectedBitsAreCorrect && <div style={{ color: 'green' }}>Биты для экспоненты выбраны верно</div>}
-            {enteredNumberIsCorrect && <div style={{ color: 'green' }}>Разрядная сетка построена верно</div>}
+            {checkCorrectAnswer && <div>Возможный ответ: {enteredNumber}</div>}
+            {checkCorrectAnswer && selectedBitsAreCorrect &&
+            <div style={{ color: 'green' }}>Биты для экспоненты выбраны верно</div>}
+            {checkCorrectAnswer && enteredNumberIsCorrect &&
+            <div style={{ color: 'green' }}>Разрядная сетка построена верно</div>}
 
         </>
     );

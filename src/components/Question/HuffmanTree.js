@@ -1,5 +1,5 @@
 import React, { Component, useState } from 'react';
-import SortableTree, { walk } from 'react-sortable-tree';
+import SortableTree, { walk, removeNodeAtPath } from 'react-sortable-tree';
 import SortableTreeFullDragTheme from 'react-sortable-tree-theme-full-node-drag';
 import 'react-sortable-tree/style.css';
 import _ from 'lodash'; // This only needs to be imported once in your app
@@ -18,11 +18,11 @@ function makeNode(title, prob, temporary = false) {
         prob,
         subtitle: (e) => 'Frequency: ' + e.node.prob.toPrecision(2) + '; Code: ' + e.node.code,
         id: id_count++,
-        code: '_',
+        code: '_'
     };
 }
 
-export default function HuffmanTree({ params: [msg], userAnswer, onChange }) {
+export default function HuffmanTree({ params: [msg], userAnswer, onChange, checkCorrectAnswer }) {
     const initTreeState = () => {
         let freq = {};
         for (let ch of Array.from(msg)) {
@@ -32,7 +32,6 @@ export default function HuffmanTree({ params: [msg], userAnswer, onChange }) {
             makeNode(char, frequency / msg.length)
         );
     };
-
 
     const treeData = userAnswer.additionalProperties?.tree ?? initTreeState();
     const setTreeData = (data) => {
@@ -58,21 +57,21 @@ export default function HuffmanTree({ params: [msg], userAnswer, onChange }) {
                 ignoreCollapsed: false,
                 callback: ({ node }) => {
                     if (node.id === p) n = node;
-                },
+                }
             });
             if (n != null) {
                 n.prob = n.children.reduce((acc, curr) => acc + curr.prob, 0);
-                n.title =
-                    '{ ' + n.children.reduce((acc, curr) => acc + curr.title + ' ', '') + ' }';
+                n.title = '{ ' + n.children.reduce((acc, curr) => acc + curr.title + ' ', '') + ' }';
             }
         }
 
         if (!nextParentNode || !nextParentNode.temporary) return;
         nextParentNode.prob = nextParentNode.children.reduce((acc, curr) => acc + curr.prob, 0);
-        nextParentNode.title = `{${nextParentNode.children.reduce(
-            (acc, curr) => acc + curr.title,
-            ''
-        )}}`;
+        // nextParentNode.title = `{${nextParentNode.children.reduce(
+        //     (acc, curr) => acc + curr.title,
+        //     ''
+        // )}}`;
+        nextParentNode.title = 'Узел-связка';
 
         const recursiveNaming = (node, code) => {
             node.code = code;
@@ -91,15 +90,33 @@ export default function HuffmanTree({ params: [msg], userAnswer, onChange }) {
 
     const onClick = (e) => {
         let next = _.cloneDeep(treeData);
-        next.push(makeNode('TMP', 0.0, true));
+        next.unshift(makeNode('Узел-связка', 0.0, true));
         setTreeData(next);
     };
 
     let treeIsCorrect = userAnswer.additionalProperties?.treeIsCorrect ?? false;
 
-    let containerTitle = treeIsCorrect ?
-        (<p className={'title'} style={{color: "green"}}>Редактор деревьев (Дерево построено верно!) </p>)
+    let containerTitle = checkCorrectAnswer && treeIsCorrect ?
+        (<p className={'title'} style={{ color: 'green' }}>Редактор деревьев (Дерево построено верно!) </p>)
         : (<p className={'title'}>Редактор деревьев</p>);
+
+    const removeNodeButton = ({ node, path }) => (node.temporary && node.children?.length === 0  && {
+        buttons: [
+            <button
+                onClick={() => {
+                    // console.log(node, path);
+                    return setTreeData(removeNodeAtPath({
+                        treeData: treeData,
+                        path,
+                        getNodeKey
+                    }));
+                }
+                }
+            >
+                X
+            </button>
+        ]
+    });
 
     return (
         <div
@@ -117,6 +134,7 @@ export default function HuffmanTree({ params: [msg], userAnswer, onChange }) {
                 canDrop={canDrop}
                 getNodeKey={getNodeKey}
                 theme={SortableTreeFullDragTheme}
+                generateNodeProps={removeNodeButton}
             />
         </div>
     );
