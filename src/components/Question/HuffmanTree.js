@@ -22,7 +22,7 @@ function makeNode(title, prob, temporary = false) {
     };
 }
 
-export default function HuffmanTree({ params: [msg], userAnswer, onChange, checkCorrectAnswer }) {
+export default function HuffmanTree({ params: [msg], userAnswer, onChange, checkCorrectAnswer, blockedInput }) {
     const initTreeState = () => {
         let freq = {};
         for (let ch of Array.from(msg)) {
@@ -99,22 +99,13 @@ export default function HuffmanTree({ params: [msg], userAnswer, onChange, check
     let containerTitle = checkCorrectAnswer && treeIsCorrect ?
         (<p className={'title'} style={{ color: 'green' }}>Редактор деревьев (Дерево построено верно!) </p>)
         : (<p className={'title'}>Редактор деревьев</p>);
+    if (checkCorrectAnswer && !treeIsCorrect && blockedInput)
+        containerTitle =  (<p className={'title'} style={{ color: 'red' }}>Редактор деревьев (Дерево построено неверно!) </p>)
 
-    const removeNodeButton = ({ node, path }) => (node.temporary && node.children?.length === 0  && {
+    const removeNodeButton = ({ node, path }) => (node.temporary && (!node.children || node.children?.length === 0) && {
         buttons: [
-            <button
-                onClick={() => {
-                    // console.log(node, path);
-                    return setTreeData(removeNodeAtPath({
-                        treeData: treeData,
-                        path,
-                        getNodeKey
-                    }));
-                }
-                }
-            >
-                X
-            </button>
+            <button onClick={() =>
+                setTreeData(removeNodeAtPath({ treeData: treeData, path, getNodeKey }))}> X </button>
         ]
     });
 

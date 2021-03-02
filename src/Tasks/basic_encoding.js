@@ -12,6 +12,10 @@ export class Task6 extends ProtoTask {
         return `${amountInfo};${volumeInfo}`;
     }
 
+    static additionalInformation() {
+        return 'Ответы следует разделять точкой с запятой, т.е. если количество информации равно 4, а объём 10, то вам следует ввести "4;10"';
+    }
+
     static generateTask() {
         let a = randInt(5, 70);
         let b = randInt(7, 20);
@@ -34,6 +38,10 @@ export class Task7 extends ProtoTask {
         let ternary = Math.ceil(Math.log2(a) / Math.log2(3));
         let binary = Math.ceil(Math.log2(a));
         return `${ternary};${binary}`;
+    }
+
+    static additionalInformation() {
+        return 'Вам нужно ввести два ответа, разделив их точкой с запятой ("AAA;BBB")';
     }
 
     static generateTask() {
@@ -88,6 +96,10 @@ export class HuffmanEncoding extends ProtoTask {
     static taskName = 'Кодирование методом Хаффмана';
     static paramsLength = 2;
     static uses_huffman_tree = true;
+
+    static additionalInformation() {
+        return 'Для начала вам следует составить дерево. Все ключевые узлы для символов сообщения уже созданы. Для добавления узла-связки нажмите на соответствующую кнопку. Для того, чтобы назначить один узел в потомки другому, перетащите его мышкой на него. После того, как дерево будет составлено, вы должны будете закодировать сообщение в соответствии с ним и ввести ответ в поле ввода. Удачи!';
+    }
 
     static solve([msg]) {
         class NodeTree {
@@ -212,14 +224,16 @@ export class HuffmanEncoding extends ProtoTask {
 
         let treeIsCorrect = this.checkTree(userAnswer.additionalProperties?.tree);
         let isCorrect = false;
+        let decoded_msg = '';
         if (treeIsCorrect) {
-            let decoded_msg = this.decodeMessage(taskDescription.params, userAnswer);
+            decoded_msg = this.decodeMessage(taskDescription.params, userAnswer);
             if (decoded_msg === userAnswer.mainAnswer.value.toString()) isCorrect = true;
         }
 
         let answer = _.cloneDeep(userAnswer);
         answer.additionalProperties.treeIsCorrect = treeIsCorrect;
         answer.mainAnswer.correct = isCorrect;
+        answer.mainAnswer.correctAnswer = decoded_msg;
 
         return answer;
     }

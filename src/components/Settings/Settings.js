@@ -68,7 +68,6 @@ function formatLink(pairs, showCorrectAnswersChecked) {
         .join('&');
     if (params.length > 0) {
         mainLink += '?' + params;
-        console.log(showCorrectAnswersChecked);
         if (showCorrectAnswersChecked)
             mainLink += '&dontCheckCorrectAnswers=YES';
     } else if (showCorrectAnswersChecked) {
@@ -87,14 +86,14 @@ export default function Settings() {
     }));
     const [checked, setChecked] = useState(checkedInit);
     const [showCorrectAnswersChecked, setShowCorrectAnswersChecked] = useState(false);
-    const showCorrectAnswerCheckBox = (<div>
+    const showCorrectAnswerCheckBox = (<div style={{padding: 10}}>
         <label>
             <input
                 type='checkbox'
                 onChange={(e) => setShowCorrectAnswersChecked(e.target.checked)}
                 className={'nes-checkbox'}
             />
-            <span> Не оценивать правильность решения во время ввода</span>
+            <span> Не оценивать правильность решения до нажатия кнопки "Проверить" </span>
         </label>
     </div>);
 

@@ -30,47 +30,61 @@ function questinator(getParams) {
             }
             return {
                 answer: answer,
-                text: finalString.join(''),
+                text: finalString.join('')
             };
         };
     };
 }
 
 
-
 export default function TestBlock({ checkCorrectAnswer, tasks, answers }) {
+    const blockInputsAfterBtnPressed = !checkCorrectAnswer;
+
+    const [blockedInput, setBlockedInput] = useState(false);
 
     const onAnswerEnter = (i, answer) => {
         tasks[i].taskUpdateAnswer(answer);
     };
 
+
     let tests = tasks.map((task, i) => (
         <li className={'nes-container is-rounded'} key={i}>
-            <div style={{ display: "inherit", width: "inherit", top: -15 }} className="nes-badge is-splited">
-                <span style={{width: "10%"}} className="is-success">{i+1}</span>
-                <span style={{width: "90%"}} className="is-dark">{task.taskClass.taskName}</span>
+            <div style={{ display: 'inherit', width: 'inherit', top: -15 }} className='nes-badge is-splited'>
+                <span style={{ width: '10%' }} className='is-success'>{i + 1}</span>
+                <span style={{ width: '90%' }} className='is-dark'>{task.taskClass.taskName}</span>
             </div>
             <Question
                 keyId={i}
                 task={task}
                 onInputChange={(answer) => onAnswerEnter(i, answer)}
                 userAnswer={answers[i]}
-                checkCorrectAnswer={checkCorrectAnswer}
+                checkCorrectAnswer={blockedInput || !blockInputsAfterBtnPressed}
+                blockedInput={blockedInput}
             />
         </li>
     ));
+
 
     let correctAnswers = answers.filter((a) => a.mainAnswer.correct).length;
     return (
         <div className='App'>
             <ul> {tests} </ul>
-            {checkCorrectAnswer &&  <div> {correctAnswers} из {answers.length} правильно </div>}
+            {(blockedInput || !blockInputsAfterBtnPressed) &&
+            <div> {correctAnswers} из {answers.length} правильно </div>}
 
-            {correctAnswers === answers.length && (
+            {(blockedInput || !blockInputsAfterBtnPressed)
+            && correctAnswers === answers.length && (
                 <section className='icon-list'>
-                    <i className='nes-octocat animate'/>
+                    <i className='nes-octocat animate' />
                 </section>
             )}
+
+            {!checkCorrectAnswer &&
+            <button disabled={blockedInput} style={{ width: '50%' }}
+                    className={'nes-btn' + (blockedInput ? ' is-disabled' : '')}
+                    onClick={() => setBlockedInput(true)}>
+                Проверить
+            </button>}
         </div>
     );
 }

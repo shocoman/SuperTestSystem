@@ -11,10 +11,6 @@ export class SizeOfAlphabet extends ProtoTask {
         return Math.pow(2, bitsInOneLetter);
     }
 
-    static additionalInformation() {
-        return 'Some text info';
-    }
-
     static generateTask() {
         let bitsInOneLetter = randInt(1, 11);
         let params = [bitsInOneLetter];

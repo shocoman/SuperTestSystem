@@ -19,7 +19,8 @@ export class ProtoTask {
 
     static additionalInformation() {
         // return this.taskName.length % 3 != 0 ? 'AAAAA AAAAA AAAAA AAAAAAAAAAAAAA' : '';
-        return 'PLACE HOLDER\n' + this.getText([]);
+        // return 'PLACE HOLDER\n' + this.getText([]);
+        return '';
     }
 
     static generateTask() {
@@ -33,9 +34,11 @@ export class ProtoTask {
     }
 
     static checkAnswerAndReduce(taskDescription, userAnswer) {
-        let isCorrect = this.solve(taskDescription.params).toString() === userAnswer.mainAnswer.value.toString();
+        const correctAnswer = this.solve(taskDescription.params).toString();
+        let isCorrect = correctAnswer === userAnswer.mainAnswer.value.toString();
         let answer = _.cloneDeep(userAnswer);
         answer.mainAnswer.correct = isCorrect;
+        answer.mainAnswer.correctAnswer = correctAnswer;
         return answer;
     }
 }

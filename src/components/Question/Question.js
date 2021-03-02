@@ -2,7 +2,7 @@ import React from 'react';
 import './Question.css';
 import ConvertDecimalTable from './ConvertDecimalTable';
 import { formatTable } from './EncodingTable';
-import { ExpressionEvaluator } from './ExpressionEvaluator';
+import { Calculator } from './Calculator';
 import HuffmanTree from './HuffmanTree';
 import _ from 'lodash';
 import { UserAnswer } from '../../Tasks/utilities';
@@ -15,8 +15,7 @@ export const AnswerStatus = Object.freeze({
     RIGHT: 3
 });
 
-export default function Question({ checkCorrectAnswer, onInputChange, keyId, userAnswer, task }) {
-
+export default function Question({ blockedInput, checkCorrectAnswer, onInputChange, keyId, userAnswer, task }) {
 
     const onMainInputChange = (e) => {
         let u = _.cloneDeep(userAnswer);
@@ -28,7 +27,11 @@ export default function Question({ checkCorrectAnswer, onInputChange, keyId, use
         onInputChange(answer);
     };
 
-    const className = 'nes-input ' + (checkCorrectAnswer && userAnswer.mainAnswer.correct ? 'is-success' : '');
+    let className = 'nes-input ' + (checkCorrectAnswer && userAnswer.mainAnswer.correct ? 'is-success' : '');
+    const answerIsIncorrect = blockedInput && className === 'nes-input ';
+    if (answerIsIncorrect)
+        className += 'is-error';
+
     return (
         <div className='testCard'>
             <div className='questionText'>
@@ -45,7 +48,7 @@ export default function Question({ checkCorrectAnswer, onInputChange, keyId, use
             />)
             }
             {task.taskClass.uses_table && formatTable(task.taskDescription.params)}
-            {task.taskClass.uses_calculator && ExpressionEvaluator()}
+            {task.taskClass.uses_calculator && Calculator()}
             {task.taskClass.uses_convert_table && (
                 <ConvertDecimalTable
                     floatConvert={false}
@@ -70,6 +73,7 @@ export default function Question({ checkCorrectAnswer, onInputChange, keyId, use
                     userAnswer={userAnswer}
                     onChange={onAdditionalComponentChange}
                     checkCorrectAnswer={checkCorrectAnswer}
+                    blockedInput={blockedInput}
                 />
             )}
 
@@ -81,8 +85,12 @@ export default function Question({ checkCorrectAnswer, onInputChange, keyId, use
                     value={task.userAnswer}
                     onChange={onMainInputChange}
                     className={className}
+                    disabled={blockedInput}
                 />
                 <InfoPopup msg={task.taskClass.additionalInformation()} />
+                {answerIsIncorrect && userAnswer.mainAnswer.correctAnswer && <div>
+                    Правильный ответ: {userAnswer.mainAnswer.correctAnswer}
+                </div>}
                 <i className='nes-kirby' />
             </div>
         </div>

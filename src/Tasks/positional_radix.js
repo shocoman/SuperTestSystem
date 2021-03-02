@@ -8,6 +8,10 @@ export class ConvertDecimalToN extends ProtoTask {
     static uses_calculator = true;
     static uses_convert_table = true;
 
+    static additionalInformation() {
+        return 'Вам также следует заполнить таблицу перевода (правила вам известны). Для добавления новой строки, поставьте курсой на последнюю (строку) и нажмите Enter. Для удаления последней строки, поставьте курсор на последнюю и нажмите Backspace.';
+    }
+
     static solve([number, base]) {
         let remainderParts = [];
         let intParts = [];
@@ -39,6 +43,7 @@ export class ConvertDecimalToN extends ProtoTask {
                 { ...snd_col, correct: table[i] && snd_col.value === table[i][1].toString() }
             ]
         );
+        answer.mainAnswer.correctAnswer = mainAnswer.toString();
 
         return answer;
     }
@@ -76,7 +81,7 @@ export class ConvertNtoDecimal extends ProtoTask {
     static getText(params) {
         for (let i = 0; i < this.paramsLength; ++i)
             params[i] = params[i] ?? String.fromCharCode('A'.charCodeAt(0) + i);
-        return `Перевести число ${params[0]} из системы счисления с основанием ${params[1]} в десятичную.`;
+        return `Перевести число ${params[0]} из системы счисления с основанием ${params[1]} в десятичную СС.`;
     }
 }
 
@@ -85,6 +90,10 @@ export class ConvertDecimalFloatToN extends ProtoTask {
     static paramsLength = 2;
     static uses_float_convert_table = true;
     static uses_calculator = true;
+
+    static additionalInformation() {
+        return 'Вам также следует заполнить таблицу перевода (правила вам известны). Для добавления новой строки, поставьте курсой на последнюю (строку) и нажмите Enter. Для удаления последней строки, поставьте курсор на последнюю и нажмите Backspace.';
+    }
 
     static solve([number, base]) {
         let answer = '';
@@ -107,6 +116,8 @@ export class ConvertDecimalFloatToN extends ProtoTask {
         const isCorrect = correctAnswer === userAnswerString;
         let answer = _.cloneDeep(userAnswer);
         answer.mainAnswer.correct = isCorrect;
+        answer.mainAnswer.correctAnswer = correctAnswer;
+
         return answer;
     }
 
@@ -131,12 +142,15 @@ export class ConvertDecimalFloatToN extends ProtoTask {
     }
 }
 
-
 export class FloatRepresentationTask extends ProtoTask {
     static taskName = 'Представление чисел с плавающей запятой';
     static paramsLength = 1;
     static uses_calculator = true;
     static uses_float_grid = true;
+
+    static additionalInformation() {
+        return 'Для выделения диапазона битов, вам нужно мышкой переместить чёрные стрелочки (они находятся в нижнем правом углу разрядной сетки). Для изменения значения бита, нажимайте на X сверху.';
+    }
 
     static solve([numberString]) {
         let num = 0;
@@ -173,14 +187,8 @@ export class FloatRepresentationTask extends ProtoTask {
         return new Float32Array(buffer)[0];
     }
 
-
-    static additionalInformation() {
-        return 'Для выбора нужных битов воспользуйтесь двумя стрелками в нижнем правом углу разрядной сетки';
-    }
-
     static checkAnswerAndReduce(taskDescription, userAnswer) {
         const correctAnswer = this.solve(taskDescription.params).toString();
-        console.log('Correct answer: ', correctAnswer);
 
         let mainAnswerIsCorrect = correctAnswer === userAnswer.mainAnswer.value.toString();
         let selectedBitsAreCorrect = true;
@@ -200,6 +208,7 @@ export class FloatRepresentationTask extends ProtoTask {
         answer.mainAnswer.correct = mainAnswerIsCorrect;
         answer.additionalProperties.float_grid.correct = enteredNumberIsCorrect;
         answer.additionalProperties.float_grid.bitsCorrect = selectedBitsAreCorrect;
+        answer.mainAnswer.correctAnswer = correctAnswer;
 
         return answer;
     }
