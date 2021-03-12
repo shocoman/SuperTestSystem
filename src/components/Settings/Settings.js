@@ -35,7 +35,6 @@ function ThemeChooser({ name, id, setChecked }) {
         <div>
             <label>
                 <input
-                    size={3}
                     type='number'
                     value={text}
                     disabled={!numberEnabled}
@@ -43,7 +42,11 @@ function ThemeChooser({ name, id, setChecked }) {
                     pattern={/[\d]*/}
                     onChange={onTextEnter}
                     className={'nes-input'}
-                    style={{ borderImageOutset: 0, margin: 1 }}
+                    style={{
+                        borderImageOutset: 0,
+                        margin: 1,
+                        width: '6ch'
+                    }}
                 />
             </label>
             <label>
@@ -64,7 +67,7 @@ function formatLink(pairs, showCorrectAnswersChecked) {
 
     let params = pairs
         .filter((check) => check.number > 0)
-        .map((check) => `${check.name.replaceAll(' ', '_')}=${check.number}`)
+        .map((check) => `${check.name.split(' ').join('_')}=${check.number}`)
         .join('&');
     if (params.length > 0) {
         mainLink += '?' + params;
@@ -79,14 +82,14 @@ function formatLink(pairs, showCorrectAnswersChecked) {
 
 export default function Settings() {
 
-    const задачи = initialTasks.map((a) => a.taskName ?? a.name);
-    let checkedInit = задачи.map((name) => ({
+    const assignments = initialTasks.map((a) => a.taskName ?? a.name);
+    let checkedInit = assignments.map((name) => ({
         name,
         number: 0
     }));
     const [checked, setChecked] = useState(checkedInit);
     const [showCorrectAnswersChecked, setShowCorrectAnswersChecked] = useState(false);
-    const showCorrectAnswerCheckBox = (<div style={{padding: 10}}>
+    const showCorrectAnswerCheckBox = (<div style={{ padding: 10 }}>
         <label>
             <input
                 type='checkbox'
@@ -102,7 +105,7 @@ export default function Settings() {
             <div className={'title'}>Выбери тему и кол-во заданий</div>
 
 
-            {задачи.map((name, index) => (
+            {assignments.map((name, index) => (
                 <ThemeChooser name={name} id={index} key={index} setChecked={setChecked} />
             ))}
             {showCorrectAnswerCheckBox}

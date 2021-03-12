@@ -16,7 +16,7 @@ function initInitialTasks(initialTasks) {
     let topics = {};
     for (let [k, v] of url.searchParams) {
         if (v === '') continue;
-        let name = k.replaceAll('_', ' ');
+        let name = k.split('_').join(' ');
         topics[name] = parseInt(v);
     }
     for (let t of allTasks) {

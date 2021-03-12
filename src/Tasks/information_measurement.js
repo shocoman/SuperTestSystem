@@ -113,8 +113,10 @@ export class Task5 extends ProtoTask {
         for (let [char, prob] of Object.entries(probs)) {
             sum += prob * Math.log2(prob)
         }
+        sum *= -1;
+        sum = (Math.round(sum * 1000) | 0) / 1000;
 
-        return -sum;
+        return sum;
     }
 
     static generateTask() {
@@ -135,6 +137,6 @@ export class Task5 extends ProtoTask {
     static getText(params) {
         for (let i = 0; i < this.paramsLength; ++i)
             params[i] = params[i] ?? String.fromCharCode('A'.charCodeAt(0) + i);
-        return `Найти энтропию алфавита, задействованного в сообщении: "${params[0]}"`;
+        return `Найти энтропию алфавита, задействованного в сообщении: "${params[0]}. Ответ округлить до тысячных"`;
     }
 }
